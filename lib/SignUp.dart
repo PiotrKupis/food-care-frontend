@@ -328,36 +328,37 @@ class _SignUpState extends State<SignUpState>{
                 )
             ),
             onPressed: ()  async {
-              bool verify = false;
               if (keyForm.currentState.validate()) {
                 String username = nameController.text.toString();
                 String email = emailController.text.toString();
                 String password = passwordController.text.toString();
                 String phone = phoneNumController.text.toString();
-                print(username + " " + email + " " + password + " " + phone);
-                Response response;
-                var dio = Dio();
-                response = await dio.post('https://food-care2.herokuapp.com/auth/register',
-                data:{
-                  "name" : username,
-                  "email" : email,
-                  "password" : password,
-                  "phoneNumber" : phone
-                });
-                if(response.statusCode == 200){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-                  return;
+                try{
+                  Response response;
+                  var dio = Dio();
+                  response = await dio.post('https://food-care2.herokuapp.com/auth/register',
+                      data:{
+                        "name" : username,
+                        "email" : email,
+                        "password" : password,
+                        "phoneNumber" : phone
+                      });
+                  if(response.statusCode == 200){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+                    return;
+                  }
+                } catch (e){
+                  Fluttertoast.showToast(
+                      msg: "Couldn't create account",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
                 }
               }
-              Fluttertoast.showToast(
-                  msg: "Couldn't create account",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
             }),
     )
     );

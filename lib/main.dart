@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/SignUp.dart';
 import 'package:food_care/SignIn.dart';
+import 'package:food_care/MainPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -174,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
             ),
             onPressed: ()=> {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()))
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()))
             },
           ),
         )
