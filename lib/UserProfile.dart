@@ -7,7 +7,7 @@ class UserProfile extends StatelessWidget{
     return MaterialApp(
       title: "Food Care",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepOrange,
       ),
       debugShowCheckedModeBanner: false,
       home: UserProfileWidget(),

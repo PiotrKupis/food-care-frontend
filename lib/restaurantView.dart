@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_care/restaurantView.dart';
+import 'package:food_care/opinionView.dart';
 
-class RestaurantResult extends StatelessWidget{
+class RestaurantView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
@@ -11,38 +10,44 @@ class RestaurantResult extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: ShownRestaurants(),
+      home: RestaurantInfo(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 
-class ShownRestaurants extends StatefulWidget{
+class RestaurantInfo extends StatefulWidget{
 
   @override
   State createState() {
-    return _ShownRestaurants();
+    return _RestaurantInfo();
   }
 }
 
-class _ShownRestaurants extends State<ShownRestaurants>{
-
+class _RestaurantInfo extends State<RestaurantInfo>{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     return Scaffold(
       body: Center(
         child: Column(
           children: [
-            Text("Restaurant list:"),
+            Text("Restaurant info:"),
             RaisedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantInfo()));
             },
-              child: Text("Restaurant"),)
+              child: Text("Offer"),),
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OpinionInfo()));
+              },
+              child: Text("Opinion"),
+            )
           ],
         ),
       )  
     );
   }
+  
 }

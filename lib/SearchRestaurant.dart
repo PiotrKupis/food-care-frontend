@@ -7,6 +7,10 @@ class SearchRestaurant extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Food Care',
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+      ),
       home: SearchRestaurantWidget(),
       debugShowCheckedModeBanner: false,
     );
