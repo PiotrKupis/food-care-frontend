@@ -10,7 +10,7 @@ class UserProfile extends StatelessWidget{
         primarySwatch: Colors.deepOrange,
       ),
       debugShowCheckedModeBanner: false,
-      home: UserProfileWidget(),
+      home: UserProfileWidget(context),
     );
   }
 }
@@ -19,17 +19,40 @@ class UserProfile extends StatelessWidget{
 
 class UserProfileWidget extends StatefulWidget{
 
-  @override
-  State createState() {
-    return _UserProfileWidget();
+ BuildContext context;
+
+  UserProfileWidget(BuildContext context){
+    this.context = context;
   }
+
+  @override
+  State createState() => _UserProfileWidget(context);
+
 }
 
 class _UserProfileWidget extends State<UserProfileWidget>{
 
+   BuildContext oldContext;
+
+  _UserProfileWidget(BuildContext context){
+    oldContext = context;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+        leading: IconButton(
+          icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.of(oldContext).pop();
+          },
+        ),
+      ),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -198,10 +221,10 @@ class ChangeData extends StatelessWidget{
     return MaterialApp(
       title: "Food Care",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepOrange,
       ),
       debugShowCheckedModeBanner: false,
-      home: ChangeDataWidget(dataName: dataName,),
+      home: ChangeDataWidget(dataName: dataName, context: context,),
     );
   }
 }
@@ -210,25 +233,40 @@ class ChangeData extends StatelessWidget{
 class ChangeDataWidget extends StatefulWidget{
 
   String dataName;
+  BuildContext context;
 
-  ChangeDataWidget({@required this.dataName});
+  ChangeDataWidget({@required this.dataName, this.context});
 
   @override
-  State createState() {
-    return _ChangeDataWidget(dataName: dataName);
-  }
+  State createState() => _ChangeDataWidget(dataName: dataName, oldContext: context);
+
+
 }
 
 
 class _ChangeDataWidget extends State<ChangeDataWidget>{
 
   String dataName;
+  BuildContext oldContext;
 
-  _ChangeDataWidget({@required this.dataName});
+  _ChangeDataWidget({@required this.dataName,this.oldContext});
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(dataName),
+        leading: IconButton(
+          icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.of(oldContext).pop();
+          },
+        ),
+      ),
       body: Center(
         child: Text(dataName),
       ),

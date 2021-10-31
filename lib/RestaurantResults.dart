@@ -34,7 +34,7 @@ class _ShownRestaurants extends State<ShownRestaurants>{
       body: Center(
         child: Column(
           children: [
-            Text("Restaurant list:"),
+            Text("Restaurants list:"),
             RaisedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantInfo()));
