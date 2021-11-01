@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_care/Business.dart';
 
 class UserProfile extends StatelessWidget{
 
@@ -10,7 +11,7 @@ class UserProfile extends StatelessWidget{
         primarySwatch: Colors.deepOrange,
       ),
       debugShowCheckedModeBanner: false,
-      home: UserProfileWidget(context),
+      home: UserProfileWidget(),
     );
   }
 }
@@ -19,37 +20,22 @@ class UserProfile extends StatelessWidget{
 
 class UserProfileWidget extends StatefulWidget{
 
- BuildContext context;
-
-  UserProfileWidget(BuildContext context){
-    this.context = context;
-  }
-
   @override
-  State createState() => _UserProfileWidget(context);
-
+  State createState() {
+    return _UserProfileWidget();
+  }
 }
 
 class _UserProfileWidget extends State<UserProfileWidget>{
-
-   BuildContext oldContext;
-
-  _UserProfileWidget(BuildContext context){
-    oldContext = context;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
         leading: IconButton(
-          icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-          ),
+          icon: Icon(Icons.arrow_back),
           onPressed: (){
-            Navigator.of(oldContext).pop();
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -156,7 +142,7 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Business")));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessAdd()));
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)
@@ -221,10 +207,10 @@ class ChangeData extends StatelessWidget{
     return MaterialApp(
       title: "Food Care",
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: ChangeDataWidget(dataName: dataName, context: context,),
+      home: ChangeDataWidget(dataName: dataName,),
     );
   }
 }
@@ -233,40 +219,25 @@ class ChangeData extends StatelessWidget{
 class ChangeDataWidget extends StatefulWidget{
 
   String dataName;
-  BuildContext context;
 
-  ChangeDataWidget({@required this.dataName, this.context});
+  ChangeDataWidget({@required this.dataName});
 
   @override
-  State createState() => _ChangeDataWidget(dataName: dataName, oldContext: context);
-
-
+  State createState() {
+    return _ChangeDataWidget(dataName: dataName);
+  }
 }
 
 
 class _ChangeDataWidget extends State<ChangeDataWidget>{
 
   String dataName;
-  BuildContext oldContext;
 
-  _ChangeDataWidget({@required this.dataName,this.oldContext});
-
+  _ChangeDataWidget({@required this.dataName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(dataName),
-        leading: IconButton(
-          icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-          ),
-          onPressed: (){
-            Navigator.of(oldContext).pop();
-          },
-        ),
-      ),
       body: Center(
         child: Text(dataName),
       ),

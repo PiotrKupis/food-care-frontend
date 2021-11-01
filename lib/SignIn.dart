@@ -7,6 +7,8 @@ import 'package:email_validator/email_validator.dart';
 
 class SignIn extends StatelessWidget{
 
+  static String token;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -249,6 +251,9 @@ class _SignInState extends State<SignInState>{
                         "password" : password,
                       });
                   if(response.statusCode == 200){
+                    Map<String,dynamic> map = response.data;
+                    String e = map.values.elementAt(0);
+                    SignIn.token = e;
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
                     return;
                   }
