@@ -1,41 +1,20 @@
 import 'package:flutter/material.dart';
 
-class AddProductView extends StatelessWidget{
+
+
+
+class AddProductView extends StatefulWidget{
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Food Care',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: AddProductWidget(context: context,),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-
-class AddProductWidget extends StatefulWidget{
-
- 
-  BuildContext context;
-
-  AddProductWidget({this.context});
-
-  @override
-  State createState() => _AddProductWidget(oldContext: context);
+  State createState() => _AddProductView();
 
 
 }
 
 
-class _AddProductWidget extends State<AddProductWidget>{
+class _AddProductView extends State<AddProductView>{
 
   String dataName;
-  BuildContext oldContext;
-
-  _AddProductWidget({this.oldContext});
 
 
   @override
@@ -49,7 +28,7 @@ class _AddProductWidget extends State<AddProductWidget>{
               color: Colors.white,
           ),
           onPressed: (){
-            Navigator.of(oldContext).pop();
+            Navigator.of(context).pop();
           },
         ),
       ),

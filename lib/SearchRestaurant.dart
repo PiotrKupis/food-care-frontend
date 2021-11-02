@@ -2,41 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_care/RestaurantResults.dart';
 
-class SearchRestaurant extends StatelessWidget{
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Food Care',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: SearchRestaurantWidget(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class SearchRestaurantWidget extends StatefulWidget{
-
+class SearchRestaurant extends StatefulWidget {
   @override
   State createState() {
-    return _SearchRestaurantWidget();
+    return _SearchRestaurant();
   }
 }
 
-
-class _SearchRestaurantWidget extends State<SearchRestaurantWidget>{
-
+class _SearchRestaurant extends State<SearchRestaurant> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         RaisedButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantResult()));
-        },
-          child: Text("Search"),)
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => RestaurantResult()));
+          },
+          child: Text("Search"),
+        )
       ],
     );
   }

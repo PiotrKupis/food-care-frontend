@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
 
-class OpinionView extends StatelessWidget{
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Food Care',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: OpinionInfo(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-
-class OpinionInfo extends StatefulWidget {
+class OpinionView extends StatefulWidget {
 
   @override
   State createState() {
-    return _OpinionInfoState();
+    return _OpinionView();
   }
 }
 
-class _OpinionInfoState extends State<OpinionInfo> {
+class _OpinionView extends State<OpinionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

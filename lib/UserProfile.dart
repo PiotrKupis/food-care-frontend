@@ -1,47 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:food_care/Business.dart';
 import 'package:food_care/addProductView.dart';
 import 'package:food_care/editProductView.dart';
 
-import 'offerView.dart';
-
-class UserProfile extends StatelessWidget{
-
+class UserProfile extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Food Care",
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: UserProfileWidget(context),
-    );
-  }
+  State createState() => _UserProfile();
 }
 
-
-
-class UserProfileWidget extends StatefulWidget{
-
- BuildContext context;
-
-  UserProfileWidget(BuildContext context){
-    this.context = context;
-  }
-
-  @override
-  State createState() => _UserProfileWidget(context);
-
-}
-
-class _UserProfileWidget extends State<UserProfileWidget>{
-
-   BuildContext oldContext;
-
-  _UserProfileWidget(BuildContext context){
-    oldContext = context;
-  }
-
+class _UserProfile extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +16,11 @@ class _UserProfileWidget extends State<UserProfileWidget>{
         title: Text("Profile"),
         leading: IconButton(
           icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
+            Icons.arrow_back,
+            color: Colors.white,
           ),
-          onPressed: (){
-            Navigator.of(oldContext).pop();
+          onPressed: () {
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -62,29 +29,24 @@ class _UserProfileWidget extends State<UserProfileWidget>{
         children: [
           Column(
             children: [
-              Text(
-                "Profile",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
               Padding(
                 padding: EdgeInsets.all(15),
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Name",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Name",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Name")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Name")));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -94,17 +56,19 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Email",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Email",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Email")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Email")));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -114,17 +78,19 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Phone number",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Phone number",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Phone number")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Phone number")));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -134,17 +100,19 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Password",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Password",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Password")));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Password")));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -154,17 +122,16 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Business",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Business",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeData(dataName: "Business")));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => BusinessAdd()));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -174,17 +141,18 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Business offers",
-                    style: TextStyle(
-                      fontSize: 22
-                    ),
+                  child: Text(
+                    "Business offers",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessOffer()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BusinessOffer()));
                   },
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                  ),
+                      borderRadius: BorderRadius.circular(15)),
                   color: Colors.blueGrey,
                   textColor: Colors.white,
                 ),
@@ -194,10 +162,9 @@ class _UserProfileWidget extends State<UserProfileWidget>{
                 child: FlatButton(
                   minWidth: 250,
                   height: 55,
-                  child: Text("Log out",
-                    style: TextStyle(
-                        fontSize: 22
-                    ),
+                  child: Text(
+                    "Log out",
+                    style: TextStyle(fontSize: 22),
                   ),
                   onPressed: () {},
                   shape: OutlineInputBorder(),
@@ -213,48 +180,21 @@ class _UserProfileWidget extends State<UserProfileWidget>{
   }
 }
 
-
-class ChangeData extends StatelessWidget{
-
+class ChangeData extends StatefulWidget {
   String dataName;
 
   ChangeData({@required this.dataName});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Food Care",
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: ChangeDataWidget(dataName: dataName, context: context,),
-    );
-  }
+  State createState() => _ChangeData(
+        dataName: dataName,
+      );
 }
 
-
-class ChangeDataWidget extends StatefulWidget{
-
+class _ChangeData extends State<ChangeData> {
   String dataName;
-  BuildContext context;
 
-  ChangeDataWidget({@required this.dataName, this.context});
-
-  @override
-  State createState() => _ChangeDataWidget(dataName: dataName, oldContext: context);
-
-
-}
-
-
-class _ChangeDataWidget extends State<ChangeDataWidget>{
-
-  String dataName;
-  BuildContext oldContext;
-
-  _ChangeDataWidget({@required this.dataName,this.oldContext});
-
+  _ChangeData({@required this.dataName});
 
   @override
   Widget build(BuildContext context) {
@@ -263,11 +203,11 @@ class _ChangeDataWidget extends State<ChangeDataWidget>{
         title: Text(dataName),
         leading: IconButton(
           icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
+            Icons.arrow_back,
+            color: Colors.white,
           ),
-          onPressed: (){
-            Navigator.of(oldContext).pop();
+          onPressed: () {
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -278,77 +218,51 @@ class _ChangeDataWidget extends State<ChangeDataWidget>{
   }
 }
 
-class BusinessOffer extends StatelessWidget{
-
-  String dataName;
+class BusinessOffer extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Food Care",
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: BusinessOfferWidget(context: context,),
-    );
-  }
+  State createState() => _BusinessOffer();
 }
 
-class BusinessOfferWidget extends StatefulWidget{
-
- 
-  BuildContext context;
-
-  BusinessOfferWidget({this.context});
-
-  @override
-  State createState() => _BusinessOfferWidget(oldContext: context);
-
-
-}
-
-
-class _BusinessOfferWidget extends State<BusinessOfferWidget>{
-
-  BuildContext oldContext;
-
-  _BusinessOfferWidget({this.oldContext});
-
-
+class _BusinessOffer extends State<BusinessOffer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Business offers"),
-        leading: IconButton(
-          icon: Icon(
+        appBar: AppBar(
+          title: Text("Business offers"),
+          leading: IconButton(
+            icon: Icon(
               Icons.arrow_back,
               color: Colors.white,
-          ),
-          onPressed: (){
-            Navigator.of(oldContext).pop();
-          },
-        ),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Text("Products list"),
-            RaisedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductView()));
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
             },
-              child: Text("Add product"),),
-            RaisedButton( 
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EditProductView()));
-              },
-              child: Text("Edit"),
-            )
-          ],
+          ),
         ),
-      )  
-    );
+        body: Center(
+          child: Column(
+            children: [
+              Text("Products list"),
+              RaisedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddProductView()));
+                },
+                child: Text("Add product"),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditProductView()));
+                },
+                child: Text("Edit"),
+              )
+            ],
+          ),
+        ));
   }
 }
-
