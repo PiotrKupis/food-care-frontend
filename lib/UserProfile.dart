@@ -333,6 +333,7 @@ class _BusinessOfferWidget extends State<BusinessOfferWidget>{
       body: Center(
         child: Column(
           children: [
+            Text("Products list"),
             RaisedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductView()));
