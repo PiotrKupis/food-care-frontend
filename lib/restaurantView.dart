@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/opinionView.dart';
+import 'offerView.dart';
 
 class RestaurantView extends StatelessWidget{
 
@@ -35,7 +36,7 @@ class _RestaurantInfo extends State<RestaurantInfo>{
             Text("Restaurant info:"),
             RaisedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantInfo()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OfferInfo()));
             },
               child: Text("Offer"),),
             RaisedButton(
