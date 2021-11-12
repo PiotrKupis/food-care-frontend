@@ -5,6 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/MainPage.dart';
 import 'package:food_care/SignIn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum BusinessType {
   SHOP,
@@ -147,7 +148,7 @@ class _BusinessAdd extends State<BusinessAdd> {
 
   static Widget getLogoScreen(String text) {
     return Container(
-      height: 160,
+      height: 140,
       decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.rectangle,
@@ -162,8 +163,8 @@ class _BusinessAdd extends State<BusinessAdd> {
           Image.asset(
             "images/breakfast.png",
             fit: BoxFit.fitHeight,
-            height: 120,
-            width: 200,
+            height: 100,
+            width: 180,
           ),
           Text(
             text,
@@ -189,27 +190,15 @@ class _BusinessAdd extends State<BusinessAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add business"),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
       body: Column(
         children: [
-          getLogoScreen("Business"),
           Expanded(
             flex: 1,
             child: Form(
               key: keyForm,
               child: ListView(
                 children: [
+                  getLogoScreen("Business"),
                   nameInput(
                       "Name",
                       Icon(
@@ -489,15 +478,6 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add business"),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
       body: Column(
         children: [
           _BusinessAdd.getLogoScreen("Business"),
@@ -654,7 +634,10 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                   Response response;
                   try {
                     var dio = Dio();
-                    dio.options.headers["Authorization"] = '${SignIn.token}';
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String token = prefs.getString("token");
+                    dio.options.headers["Authorization"] = '${token}';
                     response = await dio.post(
                       'https://food-care2.herokuapp.com/business',
                       data: {

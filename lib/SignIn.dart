@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/MainPage.dart';
-import 'SignUp.dart';
+import 'package:food_care/user.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignIn extends StatefulWidget {
-  static String token;
-
   @override
   State createState() => _SignIn();
 }
@@ -207,9 +207,25 @@ class _SignIn extends State<SignIn> {
                     if (response.statusCode == 200) {
                       Map<String, dynamic> map = response.data;
                       String e = map.values.elementAt(0);
-                      SignIn.token = e;
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainPage()));
+                      String role = map.values.elementAt(2);
+                      try {
+                        Position position = await _determinePosition();
+                        dio.options.headers["Authorization"] = '${e}';
+                        response = await dio
+                            .get("https://food-care2.herokuapp.com/user");
+                        User user = User.fromJson(response.data);
+                        user.token = e;
+                        user.latitude = position.latitude;
+                        user.longitude = position.longitude;
+                        setUser(user, e, role);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPage()));
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+
                       return;
                     }
                   } catch (e) {
@@ -225,5 +241,39 @@ class _SignIn extends State<SignIn> {
                 }
               }),
         ));
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("Location services are disabled");
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission are denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error("Location permisssions ade disabled forever");
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void setUser(User user, String token, String role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> userDetails = [];
+    userDetails.add(user.email);
+    userDetails.add(user.name);
+    userDetails.add(user.phoneNumber);
+    userDetails.add(user.latitude.toString());
+    userDetails.add(user.longitude.toString());
+    await prefs.setStringList("userDescription", userDetails);
+    await prefs.setString("role", role);
+    await prefs.setString("token", token);
   }
 }

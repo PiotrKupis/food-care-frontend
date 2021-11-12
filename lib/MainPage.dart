@@ -34,9 +34,6 @@ class _MainPage extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("FOOD CARE"),
-      ),
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),
