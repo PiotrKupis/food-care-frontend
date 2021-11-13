@@ -99,7 +99,7 @@ class _SignIn extends State<SignIn> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
       child: TextFormField(
         validator: (email) {
-          final bool isValid = EmailValidator.validate(email);
+          final bool isValid = EmailValidator.validate(email!);
           if (isValid == false) {
             return "Invalid email format";
           }
@@ -132,7 +132,7 @@ class _SignIn extends State<SignIn> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
       child: TextFormField(
         validator: (password) {
-          if (password.isEmpty || password.length < 6) {
+          if (password!.isEmpty || password.length < 6) {
             return "Password should have at least 6 characters";
           }
           return null;
@@ -192,7 +192,7 @@ class _SignIn extends State<SignIn> {
                     ),
                   )),
               onPressed: () async {
-                if (keyForm.currentState.validate()) {
+                if (keyForm.currentState!.validate()) {
                   String email = emailController.text.toString();
                   String password = passwordController.text.toString();
                   try {

@@ -17,11 +17,11 @@ type_t getUserType(String type) {
 }
 
 class User {
-  String name, token;
-  String email, phoneNumber;
-  double latitude, longitude;
+  late String name, token;
+  late String email, phoneNumber;
+  late double latitude, longitude;
 
-  User({this.email, this.name, this.phoneNumber});
+  User({required this.email, required this.name, required this.phoneNumber});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
       email: json['email'],

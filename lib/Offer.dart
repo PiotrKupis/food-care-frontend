@@ -8,16 +8,16 @@ class Offer{
   double oldPrice, newPrice;
   DateTime creationDate,expirationDate;
 
-  Offer({@required this.name,@required this.id,@required this.restaurantID,
-    @required this.image, @required this.oldPrice, @required this.newPrice,
-    @required this.creationDate, @required this.expirationDate
+  Offer({required this.name,required this.id,required this.restaurantID,
+    required this.image, required this.oldPrice, required this.newPrice,
+    required this.creationDate, required this.expirationDate
   });
 
 }
 
 class OfferScroolContent extends StatelessWidget{
 
-  Offer offer;
+  late Offer offer;
 
   OfferScrollContent(Offer offer){
     this.offer = offer;

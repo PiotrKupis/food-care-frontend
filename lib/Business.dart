@@ -19,13 +19,13 @@ class Business {
   String openHour, closeHour;
 
   Business({
-    @required this.name,
-    @required this.address,
-    @required this.typeOfBusiness,
-    @required this.openHour,
-    @required this.closeHour,
-    @required this.email,
-    @required this.phone,
+    required this.name,
+    required this.address,
+    required this.typeOfBusiness,
+    required this.openHour,
+    required this.closeHour,
+    required this.email,
+    required this.phone,
   });
 
   static BusinessType getValue(String name) {
@@ -44,7 +44,7 @@ class Business {
 }
 
 class BusinessScrollContent extends StatelessWidget {
-  Business business;
+  late Business business;
 
   BusinessScrollContent(Business business) {
     this.business = business;
@@ -263,11 +263,11 @@ class _BusinessAdd extends State<BusinessAdd> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 5),
       child: TextFormField(
         validator: (name) {
-          if (name.isEmpty) {
+          if (name!.isEmpty) {
             return "Field is empty";
           }
           if (textfieldName.compareTo("Phone number") == 0) {
-            Pattern pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
+            String pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
             RegExp reg = RegExp(pattern);
             if (reg.hasMatch(name) == false) {
               return "Invalid phone number";
@@ -331,12 +331,12 @@ class _BusinessAdd extends State<BusinessAdd> {
               hint: Text("Choose"),
               onChanged: (value) {
                 setState(() {
-                  _selectedValue = value;
+                  _selectedValue = value as String;
                 });
               },
               onSaved: (value) {
                 setState(() {
-                  _selectedValue = value;
+                  _selectedValue = value as String;
                 });
               },
             ),
@@ -354,10 +354,10 @@ class _BusinessAdd extends State<BusinessAdd> {
         keyboardType: TextInputType.datetime,
         textInputAction: TextInputAction.next,
         validator: (name) {
-          if (name.isEmpty) {
+          if (name!.isEmpty) {
             return "Field is empty";
           }
-          Pattern pattern = r'^\d{1,2}:\d{2}$';
+          String pattern = r'^\d{1,2}:\d{2}$';
           RegExp reg = RegExp(pattern);
           if (reg.hasMatch(name) == false) {
             return "Invalid date format {XX:XX}";
@@ -413,7 +413,7 @@ class _BusinessAdd extends State<BusinessAdd> {
                     ),
                   )),
               onPressed: () async {
-                if (keyForm.currentState.validate()) {
+                if (keyForm.currentState!.validate()) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -436,12 +436,12 @@ class BusinessWidgetFormComplete extends StatefulWidget {
   BusinessType type;
 
   BusinessWidgetFormComplete(
-      {@required this.name,
-      @required this.email,
-      @required this.phone,
-      @required this.openHour,
-      @required this.closeHour,
-      @required this.type});
+      {required this.name,
+      required this.email,
+      required this.phone,
+      required this.openHour,
+      required this.closeHour,
+      required this.type});
 
   @override
   State createState() {
@@ -468,12 +468,12 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
   BusinessType type;
 
   _BusinessWidgetFormComplete(
-      {@required this.name,
-      @required this.email,
-      @required this.phone,
-      @required this.openHour,
-      @required this.closeHour,
-      @required this.type});
+      {required this.name,
+      required this.email,
+      required this.phone,
+      required this.openHour,
+      required this.closeHour,
+      required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -543,11 +543,11 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 5),
       child: TextFormField(
         validator: (name) {
-          if (name.isEmpty) {
+          if (name!.isEmpty) {
             return "Field is empty";
           }
           if (textfieldName.compareTo("Phone number") == 0) {
-            Pattern pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
+            String pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
             RegExp reg = RegExp(pattern);
             if (reg.hasMatch(name) == false) {
               return "Invalid phone number";
@@ -609,7 +609,7 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                     ),
                   )),
               onPressed: () async {
-                if (keyForm.currentState.validate()) {
+                if (keyForm.currentState!.validate()) {
                   String country = countryController.value.text;
                   String code = codeController.value.text;
                   String street = streetController.value.text;
@@ -636,7 +636,7 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                     var dio = Dio();
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    String token = prefs.getString("token");
+                    String? token = prefs.getString("token");
                     dio.options.headers["Authorization"] = '${token}';
                     response = await dio.post(
                       'https://food-care2.herokuapp.com/business',

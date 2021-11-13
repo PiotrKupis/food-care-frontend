@@ -171,7 +171,7 @@ class _UserProfile extends State<UserProfile> {
 class ChangeData extends StatefulWidget {
   String dataName;
 
-  ChangeData({@required this.dataName});
+  ChangeData({required this.dataName});
 
   @override
   State createState() => _ChangeData(
@@ -182,7 +182,7 @@ class ChangeData extends StatefulWidget {
 class _ChangeData extends State<ChangeData> {
   String dataName;
 
-  _ChangeData({@required this.dataName});
+  _ChangeData({required this.dataName});
 
   @override
   Widget build(BuildContext context) {

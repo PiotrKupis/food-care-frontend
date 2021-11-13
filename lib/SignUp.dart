@@ -105,7 +105,7 @@ class _SignUp extends State<SignUp> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         validator: (name) {
-          if (name.isEmpty) {
+          if (name!.isEmpty) {
             return "Enter your username";
           }
           return null;
@@ -135,9 +135,9 @@ class _SignUp extends State<SignUp> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
       child: TextFormField(
         validator: (phone) {
-          Pattern pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
+          String pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
           RegExp reg = RegExp(pattern);
-          if (reg.hasMatch(phone) == false) {
+          if (reg.hasMatch(phone!) == false) {
             return "Invalid phone number";
           }
           return null;
@@ -169,7 +169,7 @@ class _SignUp extends State<SignUp> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
       child: TextFormField(
         validator: (email) {
-          final bool isValid = EmailValidator.validate(email);
+          final bool isValid = EmailValidator.validate(email!);
           if (isValid == false) {
             return "Invalid email format";
           }
@@ -202,7 +202,7 @@ class _SignUp extends State<SignUp> {
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
       child: TextFormField(
         validator: (password) {
-          if (password.isEmpty || password.length < 6) {
+          if (password!.isEmpty || password.length < 6) {
             return "Password should have at least 6 characters";
           }
           ;
@@ -268,7 +268,7 @@ class _SignUp extends State<SignUp> {
                     ),
                   )),
               onPressed: () async {
-                if (keyForm.currentState.validate()) {
+                if (keyForm.currentState!.validate()) {
                   String username = nameController.text.toString();
                   String email = emailController.text.toString();
                   String password = passwordController.text.toString();

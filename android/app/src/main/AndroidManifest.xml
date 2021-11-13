@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.food_care">
    <application
+        android:requestLegacyExternalStorage="true"
         android:label="food_care"
         android:icon="@mipmap/ic_launcher">
         <activity

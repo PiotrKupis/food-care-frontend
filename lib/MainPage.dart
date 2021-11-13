@@ -3,6 +3,7 @@ import 'package:food_care/Business.dart';
 import 'package:food_care/Offer.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
+import 'package:food_care/addProductView.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _MainPage extends State<MainPage> {
 }
 
 class ScrollerTitle extends StatelessWidget {
-  String title;
+  late String title;
 
   ScrollerTitle(String title) {
     this.title = title;
@@ -153,7 +154,10 @@ class LastPageContent extends StatelessWidget {
     return ListView(
       children: [
         Column(
-          children: [UserProfileButton(context)],
+          children: [
+            UserProfileButton(context),
+            addProductButton(context),
+          ],
         )
       ],
     );
@@ -192,6 +196,44 @@ class LastPageContent extends StatelessWidget {
             onPressed: () => {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => UserProfile()))
+            },
+          ),
+        ));
+  }
+
+  Widget addProductButton(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFF6F6462)),
+                BoxShadow(color: Color(0xFFBBAA92))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+            highlightColor: Colors.transparent,
+            splashColor: Color(0xFFf7418c),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                child: Text(
+                  "ADD PRODUCT",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddProductView()))
             },
           ),
         ));

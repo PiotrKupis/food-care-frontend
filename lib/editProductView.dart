@@ -6,7 +6,7 @@ class EditProductView extends StatefulWidget {
 }
 
 class _EditProductView extends State<EditProductView> {
-  String dataName;
+  late String dataName;
 
   @override
   Widget build(BuildContext context) {

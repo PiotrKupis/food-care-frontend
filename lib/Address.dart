@@ -2,5 +2,5 @@
 class Address {
   String country,city,zipCode,street,streetNumber;
 
-  Address({this.country,this.city,this.zipCode,this.streetNumber,this.street});
+  Address({required this.country,required this.city,required this.zipCode,required this.streetNumber,required this.street});
 }
