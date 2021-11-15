@@ -208,6 +208,7 @@ class _SignIn extends State<SignIn> {
                       Map<String, dynamic> map = response.data;
                       String e = map.values.elementAt(0);
                       String role = map.values.elementAt(2);
+                      print(role);
                       try {
                         Position position = await _determinePosition();
                         dio.options.headers["Authorization"] = '${e}';

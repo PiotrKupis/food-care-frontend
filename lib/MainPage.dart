@@ -4,6 +4,7 @@ import 'package:food_care/Offer.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
 import 'package:food_care/addProductView.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -149,21 +150,35 @@ class MainPageContent extends StatelessWidget {
 }
 
 class LastPageContent extends StatelessWidget {
+  Future<String?> getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("role");
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         Column(
           children: [
-            UserProfileButton(context),
-            addProductButton(context),
+            userProfileButton(context),
+            FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  return addProductButton(context);
+                }
+                return (Container());
+              },
+              future: getRole(),
+            ),
           ],
         )
       ],
     );
   }
 
-  Widget UserProfileButton(BuildContext context) {
+  Widget userProfileButton(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(

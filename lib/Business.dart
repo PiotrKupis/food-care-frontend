@@ -656,6 +656,7 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                       },
                     );
                     if (response.statusCode == 200) {
+                      prefs.setString("role", "BUSINESS");
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => MainPage()));
                       return;

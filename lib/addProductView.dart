@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddProductView extends StatefulWidget {
   @override
@@ -33,7 +34,7 @@ class _AddProductView extends State<AddProductView> {
     textStyle: TextStyle(fontSize: 24),
   );
   String _selectedValue = "NORMAL";
-  List<String> foodTypes = ["NORMAL", "VEGAN", "VEGETARIAN"];
+  List<String> foodTypes = ["NORMAL", "VEGAN"];
 
   @override
   Widget build(BuildContext context) {
@@ -320,31 +321,38 @@ class _AddProductView extends State<AddProductView> {
                   double? reducedPrice =
                       double.tryParse(reducedPriceController.value.text);
                   if (price != null && reducedPrice != null && image != null) {
-                    String date = expirationDate!.day.toString() +
-                        "-" +
-                        expirationDate!.month.toString() +
-                        "-" +
-                        expirationDate!.year.toString();
-                    debugPrint(
-                        "$price $reducedPrice $name $_selectedValue $date");
-                    Response response;
-                    final bytes = File(image!.path).readAsBytesSync();
-                    String image64 =
-                        "data:image/jpeg;base64," + base64Encode(bytes);
-                    debugPrint(image64);
-                    var dio = Dio();
-                    response = await dio.post(
-                        "https://food-care2.herokuapp.com/auth/product/add_product",
-                        data: {
-                          "name": name,
-                          "regularPrice": price,
-                          "discountedPrice": reducedPrice,
-                          "expirationDate": date,
-                          "vegan": _selectedValue,
-                          "image": image64
-                        });
+                    try {
+                      String date = expirationDate!.year.toString() +
+                          "-" +
+                          expirationDate!.month.toString() +
+                          "-" +
+                          expirationDate!.day.toString();
+                      Response response;
+                      final bytes = File(image!.path).readAsBytesSync();
+                      String image64 =
+                          "data:image/jpeg;base64," + base64Encode(bytes);
+                      var dio = Dio();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? token = prefs.getString("token");
+                      dio.options.headers["Authorization"] = '$token';
+                      response = await dio.post(
+                          "https://food-care2.herokuapp.com/product/add_product",
+                          data: {
+                            "name": name,
+                            "regularPrice": price,
+                            "discountedPrice": reducedPrice,
+                            "expirationDate": date,
+                            "vegan": _selectedValue.compareTo("NORMAL") == 0
+                                ? false
+                                : true,
+                            "image": image64
+                          });
 
-                    debugPrint(response.statusCode.toString());
+                      debugPrint(response.statusCode.toString());
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
                   }
                 }
               }),
