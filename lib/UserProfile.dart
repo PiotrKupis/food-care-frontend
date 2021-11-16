@@ -9,6 +9,47 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfile extends State<UserProfile> {
+  static Widget getLogoScreen(String text) {
+    return Container(
+      height: 140,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.rectangle,
+          border: Border.all(color: Colors.black12),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          )),
+      child: Center(
+          child: Column(
+        children: [
+          Image.asset(
+            "images/breakfast.png",
+            fit: BoxFit.fitHeight,
+            height: 100,
+            width: 180,
+          ),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              letterSpacing: 1,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 120, right: 120),
+            child: Divider(
+              color: Colors.red,
+              height: 5,
+              thickness: 2,
+            ),
+          )
+        ],
+      )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,154 +58,182 @@ class _UserProfile extends State<UserProfile> {
         children: [
           Column(
             children: [
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Name",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeData(dataName: "Name")));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Email",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeData(dataName: "Email")));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Phone number",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeData(dataName: "Phone number")));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Password",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ChangeData(dataName: "Password")));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Business",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BusinessAdd()));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Business offers",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BusinessOffer()));
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  color: Colors.blueGrey,
-                  textColor: Colors.white,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: FlatButton(
-                  minWidth: 250,
-                  height: 55,
-                  child: Text(
-                    "Log out",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  onPressed: () {},
-                  shape: OutlineInputBorder(),
-                  color: Colors.redAccent,
-                  textColor: Colors.white,
-                ),
-              ),
+              getLogoScreen("Edit Profile"),
+              editNameButton(context),
+              editPhoneNumberButton(context),
+              editEmailButton(context),
+              editPasswordButton(context),           
             ],
           )
         ],
       ),
     );
+  }
+
+  Widget editNameButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 27, right: 15, left: 15, bottom: 10),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFFF44336)),
+                BoxShadow(color: Color(0xFFFFA726))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFFF44336), Color(0xFFFFA726)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+              highlightColor: Colors.transparent,
+              splashColor: Color(0xFFf7418c),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                  child: Text(
+                    "Name",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                    ),
+                  )),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Name")));
+                  }, 
+              ),
+        ));
+  }
+  Widget editPhoneNumberButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 27, right: 15, left: 15, bottom: 10),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFFF44336)),
+                BoxShadow(color: Color(0xFFFFA726))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFFF44336), Color(0xFFFFA726)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+              highlightColor: Colors.transparent,
+              splashColor: Color(0xFFf7418c),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                  child: Text(
+                    "Phone Number",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                    ),
+                  )),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Phone Number")));
+                  }, 
+              ),
+        ));
+  }
+
+  Widget editEmailButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 27, right: 15, left: 15, bottom: 10),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFFF44336)),
+                BoxShadow(color: Color(0xFFFFA726))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFFF44336), Color(0xFFFFA726)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+              highlightColor: Colors.transparent,
+              splashColor: Color(0xFFf7418c),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                  child: Text(
+                    "Email",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                    ),
+                  )),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Email")));
+                  }, 
+              ),
+        ));
+  }
+  Widget editPasswordButton(BuildContext context){
+     return Padding(
+        padding: EdgeInsets.only(top: 27, right: 15, left: 15, bottom: 10),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFFF44336)),
+                BoxShadow(color: Color(0xFFFFA726))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFFF44336), Color(0xFFFFA726)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+              highlightColor: Colors.transparent,
+              splashColor: Color(0xFFf7418c),
+              child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25.0,
+                    ),
+                  )),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeData(dataName: "Password")));
+                  }, 
+              ),
+        ));
   }
 }
 
@@ -206,7 +275,7 @@ class _ChangeData extends State<ChangeData> {
   }
 }
 
-class BusinessOffer extends StatefulWidget {
+/*class BusinessOffer extends StatefulWidget {
   @override
   State createState() => _BusinessOffer();
 }
@@ -236,15 +305,6 @@ class _BusinessOffer extends State<BusinessOffer> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AddProductView()));
-                },
-                child: Text("Add product"),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
                           builder: (context) => EditProductView()));
                 },
                 child: Text("Edit"),
@@ -253,4 +313,5 @@ class _BusinessOffer extends State<BusinessOffer> {
           ),
         ));
   }
-}
+
+}*/

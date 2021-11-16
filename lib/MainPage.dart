@@ -5,6 +5,7 @@ import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
 import 'package:food_care/addProductView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'businessOffer.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -172,6 +173,9 @@ class LastPageContent extends StatelessWidget {
               },
               future: getRole(),
             ),
+            businessButton(context),
+            businessOfferButton(context),
+            logoutButton(context),
           ],
         )
       ],
@@ -202,7 +206,7 @@ class LastPageContent extends StatelessWidget {
             child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
                 child: Text(
-                  "PROFILE",
+                  "EDIT PROFILE",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 25.0,
@@ -252,5 +256,118 @@ class LastPageContent extends StatelessWidget {
             },
           ),
         ));
+  }
+  Widget businessButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFF6F6462)),
+                BoxShadow(color: Color(0xFFBBAA92))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+            highlightColor: Colors.transparent,
+            splashColor: Color(0xFFf7418c),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                child: Text(
+                  "BUSINESS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => BusinessAdd()));
+            },
+          ),
+        )
+      );
+  }
+  Widget businessOfferButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFF6F6462)),
+                BoxShadow(color: Color(0xFFBBAA92))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+            highlightColor: Colors.transparent,
+            splashColor: Color(0xFFf7418c),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                child: Text(
+                  "BUSINESS OFFER",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BusinessOffer()));
+            },
+          ),
+        )
+      );
+  }
+  Widget logoutButton(BuildContext context){
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          decoration: new BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(color: Color(0xFF6F6462)),
+                BoxShadow(color: Color(0xFFBBAA92))
+              ],
+              gradient: new LinearGradient(
+                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
+                begin: const FractionalOffset(0.2, 0.2),
+                end: const FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              )),
+          child: MaterialButton(
+            highlightColor: Colors.transparent,
+            splashColor: Color(0xFFf7418c),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                child: Text(
+                  "LOG OUT",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () {},
+          ),
+        )
+      );
   }
 }
