@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Product.dart';
 import 'editProductView.dart';
 
@@ -13,7 +15,9 @@ class BusinessOffer extends StatefulWidget {
 
 class _BusinessOffer extends State<BusinessOffer> {
   late List<Product> products;
-  _BusinessOffer(this.products);
+  _BusinessOffer(this.products){}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +142,27 @@ class _BusinessOffer extends State<BusinessOffer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                       ),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            try {
+                              var dio = Dio();
+                              SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                              String? token = prefs.getString("token");
+                              dio.options.headers["Authorization"] = '$token';
+                              Response response;
+                              int id = product.id;
+                              response = await dio.delete(
+                                  "https://food-care2.herokuapp.com/product/delete_product/${product.id}");
+                              if(response.statusCode == 200){
+                                setState(() {
+                                  products.removeWhere((element) => product.id == '$id');
+                                  //BusinessOffer(products: [],);
+                                });
+                              }
+                            } catch (e) {
+                              debugPrint(e.toString());
+                            }
+                          },
                           icon: Icon(
                             Icons.delete,
                             color: Colors.red,
