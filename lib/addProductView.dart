@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:food_care/MainPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
@@ -349,7 +350,7 @@ class _AddProductView extends State<AddProductView> {
                             "image": image64
                           });
 
-                      debugPrint(response.statusCode.toString());
+                      MaterialPageRoute(builder: (context) => MainPage());
                     } catch (e) {
                       debugPrint(e.toString());
                     }

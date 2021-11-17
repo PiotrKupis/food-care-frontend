@@ -206,8 +206,9 @@ class _SignIn extends State<SignIn> {
                         });
                     if (response.statusCode == 200) {
                       Map<String, dynamic> map = response.data;
-                      String e = map.values.elementAt(0);
-                      String role = map.values.elementAt(2);
+                      int id = map.values.elementAt(0);
+                      String e = map.values.elementAt(1);
+                      String role = map.values.elementAt(3);
                       print(role);
                       try {
                         Position position = await _determinePosition();
@@ -218,7 +219,7 @@ class _SignIn extends State<SignIn> {
                         user.token = e;
                         user.latitude = position.latitude;
                         user.longitude = position.longitude;
-                        setUser(user, e, role);
+                        setUser(user, e, role, id);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -265,7 +266,7 @@ class _SignIn extends State<SignIn> {
     return await Geolocator.getCurrentPosition();
   }
 
-  void setUser(User user, String token, String role) async {
+  void setUser(User user, String token, String role, int id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> userDetails = [];
     userDetails.add(user.email);
@@ -276,5 +277,6 @@ class _SignIn extends State<SignIn> {
     await prefs.setStringList("userDescription", userDetails);
     await prefs.setString("role", role);
     await prefs.setString("token", token);
+    await prefs.setInt("id", id);
   }
 }

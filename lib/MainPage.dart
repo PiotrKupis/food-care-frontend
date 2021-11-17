@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_care/Business.dart';
 import 'package:food_care/Offer.dart';
+import 'package:food_care/Product.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
 import 'package:food_care/addProductView.dart';
@@ -257,7 +261,8 @@ class LastPageContent extends StatelessWidget {
           ),
         ));
   }
-  Widget businessButton(BuildContext context){
+
+  Widget businessButton(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
@@ -288,14 +293,14 @@ class LastPageContent extends StatelessWidget {
                   ),
                 )),
             onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BusinessAdd()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BusinessAdd()));
             },
           ),
-        )
-      );
+        ));
   }
-  Widget businessOfferButton(BuildContext context){
+
+  Widget businessOfferButton(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
@@ -325,17 +330,40 @@ class LastPageContent extends StatelessWidget {
                     fontSize: 25.0,
                   ),
                 )),
-            onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BusinessOffer()));
+            onPressed: () async {
+              List<Product> products = await getBusinessProducts();
+              Navigator.push(context,
+               MaterialPageRoute(builder: (context) => BusinessOffer(products: products,)));
             },
           ),
-        )
-      );
+        ));
   }
-  Widget logoutButton(BuildContext context){
+
+  Future<List<Product>> getBusinessProducts() async {
+    try {
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = await prefs.getString("token");
+      int? id = await prefs.getInt("id");
+      dio.options.headers["Authorization"] = token;
+      Response response = await dio.get(
+          "https://food-care2.herokuapp.com/product/get_products_list/" +
+              id.toString());
+      List<dynamic> list = response.data;
+      List<Product> products = [];
+      list.forEach((element) {
+        Map<String, dynamic> map = element;
+        Product product = Product.fromJson(map);
+        products.add(product);
+      });
+      return products;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    throw Exception("");
+  }
+
+  Widget logoutButton(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
@@ -367,7 +395,6 @@ class LastPageContent extends StatelessWidget {
                 )),
             onPressed: () {},
           ),
-        )
-      );
+        ));
   }
 }
