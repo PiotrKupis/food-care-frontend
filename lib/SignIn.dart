@@ -274,6 +274,7 @@ class _SignIn extends State<SignIn> {
     userDetails.add(user.phoneNumber);
     userDetails.add(user.latitude.toString());
     userDetails.add(user.longitude.toString());
+   // userDetails.add(user.password);
     await prefs.setStringList("userDescription", userDetails);
     await prefs.setString("role", role);
     await prefs.setString("token", token);

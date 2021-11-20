@@ -155,7 +155,7 @@ class _BusinessOffer extends State<BusinessOffer> {
                                   "https://food-care2.herokuapp.com/product/delete_product/${product.id}");
                               if(response.statusCode == 200){
                                 setState(() {
-                                  products.removeWhere((element) => product.id == '$id');
+                                  products.removeWhere((element) => element.id == '$id');
                                   //BusinessOffer(products: [],);
                                 });
                               }
