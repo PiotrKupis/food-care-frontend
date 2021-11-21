@@ -143,6 +143,7 @@ class _BusinessOffer extends State<BusinessOffer> {
                       ),
                       IconButton(
                           onPressed: () async {
+                            int id = product.id;
                             try {
                               var dio = Dio();
                               SharedPreferences prefs =
@@ -150,17 +151,19 @@ class _BusinessOffer extends State<BusinessOffer> {
                               String? token = prefs.getString("token");
                               dio.options.headers["Authorization"] = '$token';
                               Response response;
-                              int id = product.id;
+                              
                               response = await dio.delete(
                                   "https://food-care2.herokuapp.com/product/delete_product/${product.id}");
                               if(response.statusCode == 200){
                                 setState(() {
-                                  products.removeWhere((element) => element.id == '$id');
-                                  //BusinessOffer(products: [],);
+                                  products.removeWhere((element) => element.id == id);
                                 });
                               }
                             } catch (e) {
                               debugPrint(e.toString());
+                           /*   setState(() {
+                                  products.removeWhere((element) => element.id == id);
+                              });*/
                             }
                           },
                           icon: Icon(

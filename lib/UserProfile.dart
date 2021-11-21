@@ -11,6 +11,7 @@ import 'MainPage.dart';
 import 'user.dart';
 
 class UserProfile extends StatefulWidget {
+ 
   @override
   State createState() => _UserProfile();
 }
@@ -248,6 +249,7 @@ class ChangeData extends StatefulWidget {
   String dataName;
 
   ChangeData({required this.dataName});
+  
 
   @override
   State createState() => _ChangeData(
@@ -259,7 +261,9 @@ class _ChangeData extends State<ChangeData> {
   String dataName;
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController newPassword = TextEditingController(), newPassword2 = TextEditingController();
 
+  
   _ChangeData({required this.dataName});
 
   final keyForm = GlobalKey<FormState>();
@@ -319,7 +323,8 @@ class _ChangeData extends State<ChangeData> {
               child: ListView(
                 children: [
                   getLogoScreen(dataName),
-                  nameInput(
+                  if (dataName == "Name") ...[
+                     nameInput(
                       dataName,
                       Icon(
                         Icons.person,
@@ -327,7 +332,31 @@ class _ChangeData extends State<ChangeData> {
                         color: Color(0xFF666666),
                       ),
                       nameController),
-                  
+                  ] else if (dataName == "Email")...[
+                      nameInput(
+                      dataName,
+                      Icon(
+                        Icons.email,
+                        size: 22,
+                        color: Color(0xFF666666),
+                      ),
+                      nameController),
+                  ]
+                  else if (dataName == "Phone Number")...[
+                      nameInput(
+                      dataName,
+                      Icon(
+                        Icons.phone,
+                        size: 22,
+                        color: Color(0xFF666666),
+                      ),
+                      nameController),
+                  ]
+                  else if (dataName == "Password")...[
+                     newPasswordWidget(),
+                     confirmPasswordWidget(),
+                     
+                  ],
                   confirmButton(),
                 ],
               ),
@@ -338,6 +367,8 @@ class _ChangeData extends State<ChangeData> {
       )
     );
   }
+
+ 
 
   Widget confirmButton() {
     return Padding(
@@ -501,6 +532,44 @@ class _ChangeData extends State<ChangeData> {
                               fontSize: 16.0);
                       }
                     }
+                    else if(dataName == "Password"){
+                      try {
+                        String pass2 = newPassword2.value.text;
+                        var dio = Dio();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        String? token = prefs.getString("token");
+                        dio.options.headers["Authorization"] = '${token}';
+                        response = await dio.post(
+                          'https://food-care2.herokuapp.com/user',
+                          data: {
+                            "password": pass2,
+                          }
+                        );
+                        if(response.statusCode == 200){
+                          User user = User.fromJson(response.data);
+                          //debugPrint(user.phoneNumber);
+                          Fluttertoast.showToast(
+                              msg: "Successfully confirmed " + dataName.toLowerCase(),
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                      } catch (e) {
+                          print(e);
+                          Fluttertoast.showToast(
+                              msg: "Couldn't change " + dataName,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                      }
+                    }
                   }
                   catch(e){
                     debugPrint(e.toString());
@@ -510,6 +579,90 @@ class _ChangeData extends State<ChangeData> {
                 }
               }),
         ));
+  }
+
+   Widget newPasswordWidget(){
+    return Padding(
+      padding: EdgeInsets.only(left: 15,right: 15,top:15),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        obscureText: true,
+        validator: (newPass){
+          if(newPass!.isEmpty){
+            return "Enter your new password";
+          }
+          if(newPassword.text.compareTo(newPassword2.text) != 0){
+            return "Passwords don't match";
+          }
+          return null;
+        },
+        controller: newPassword,
+        showCursor: true,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                  width: 0,
+                  style: BorderStyle.none
+              )
+          ),
+          filled: true,
+          prefixIcon: Icon(
+            Icons.text_snippet,
+            size: 22,
+            color: Color(0xFF666666),
+          ),
+          fillColor: Color(0xFFF2F3F5),
+          hintStyle: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 17),
+          hintText: "Enter your new password",
+        ),
+      ),
+    );
+  }
+
+  Widget confirmPasswordWidget(){
+    return Padding(
+      padding: EdgeInsets.only(left: 15,right: 15,top:15),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        obscureText: true,
+        validator: (newPass2){
+          if(newPass2!.isEmpty){
+            return "Confirm previous password";
+          }
+          if(newPassword.text.compareTo(newPassword2.text) != 0){
+            return "Passwords don't match";
+          }
+          return null;
+        },
+        controller: newPassword2,
+        showCursor: true,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                  width: 0,
+                  style: BorderStyle.none
+              )
+          ),
+          filled: true,
+          prefixIcon: Icon(
+            Icons.text_snippet,
+            size: 22,
+            color: Color(0xFF666666),
+          ),
+          fillColor: Color(0xFFF2F3F5),
+          hintStyle: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 17),
+          hintText: "Confirm your new password",
+        ),
+      ),
+    );
   }
 }
 
@@ -554,82 +707,3 @@ Widget nameInput(
     ));
   }
 
-/*Widget oldPassword(
-      String textfieldName, Icon icon, TextEditingController controller) {
-    return (Padding(
-      padding: EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 5),
-      child: TextFormField(
-        validator: (name) {
-          if (name!.isEmpty) {
-            return "Field is empty";
-          }
-          if (textfieldName.compareTo("Phone Number") == 0) {
-            String pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
-            RegExp reg = RegExp(pattern);
-            if (reg.hasMatch(name) == false) {
-              return "Invalid phone number";
-            }
-          }
-          if (textfieldName.compareTo("Email") == 0) {
-            final bool isValid = EmailValidator.validate(name);
-            if (isValid == false) {
-              return "Invalid email format";
-            }
-          }
-          return null;
-        },
-        controller: controller,
-        showCursor: true,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(width: 4, style: BorderStyle.none)),
-          filled: true,
-          prefixIcon: icon,
-          fillColor: Color(0xFFF2F3F5),
-          hintStyle: TextStyle(color: Color(0xFF666666), fontSize: 17),
-          hintText: "Enter your new " + textfieldName.toLowerCase(),
-        ),
-      ),
-    ));
-}
-
-Widget newPassword(
-      String textfieldName, Icon icon, TextEditingController controller) {
-    return (Padding(
-      padding: EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 5),
-      child: TextFormField(
-        validator: (name) {
-          if (name!.isEmpty) {
-            return "Field is empty";
-          }
-          if (textfieldName.compareTo("Phone Number") == 0) {
-            String pattern = r'^\+?[0-9]{3}-?[0-9]{6,12}$';
-            RegExp reg = RegExp(pattern);
-            if (reg.hasMatch(name) == false) {
-              return "Invalid phone number";
-            }
-          }
-          if (textfieldName.compareTo("Email") == 0) {
-            final bool isValid = EmailValidator.validate(name);
-            if (isValid == false) {
-              return "Invalid email format";
-            }
-          }
-          return null;
-        },
-        controller: controller,
-        showCursor: true,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(width: 4, style: BorderStyle.none)),
-          filled: true,
-          prefixIcon: icon,
-          fillColor: Color(0xFFF2F3F5),
-          hintStyle: TextStyle(color: Color(0xFF666666), fontSize: 17),
-          hintText: "Enter your new " + textfieldName.toLowerCase(),
-        ),
-      ),
-    ));
-  }*/
