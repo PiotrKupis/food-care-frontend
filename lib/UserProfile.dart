@@ -395,7 +395,7 @@ class _ChangeData extends State<ChangeData> {
                   padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
                   child: Text(
-                    "CONFIRM " + dataName.toUpperCase(),
+                    "CONFIRM",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25.0,
