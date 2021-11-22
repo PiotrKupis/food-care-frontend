@@ -151,9 +151,9 @@ class _BusinessOffer extends State<BusinessOffer> {
                               String? token = prefs.getString("token");
                               dio.options.headers["Authorization"] = '$token';
                               Response response;
-                              
                               response = await dio.delete(
                                   "https://food-care2.herokuapp.com/product/delete_product/${product.id}");
+                              
                               if(response.statusCode == 200){
                                 setState(() {
                                   products.removeWhere((element) => element.id == id);
@@ -161,9 +161,7 @@ class _BusinessOffer extends State<BusinessOffer> {
                               }
                             } catch (e) {
                               debugPrint(e.toString());
-                           /*   setState(() {
-                                  products.removeWhere((element) => element.id == id);
-                              });*/
+                           
                             }
                           },
                           icon: Icon(
