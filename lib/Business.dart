@@ -13,10 +13,10 @@ enum BusinessType {
 }
 
 class Business {
-  String name, email, phone;
-  Address address;
-  BusinessType typeOfBusiness;
-  String openHour, closeHour;
+  late String name, email, phone;
+  late Address address;
+  late BusinessType typeOfBusiness;
+  late String openHour, closeHour;
 
   Business({
     required this.name,
@@ -41,6 +41,31 @@ class Business {
     }
     return "SHOP";
   }
+
+  factory Business.fromJson(Map<String, dynamic> json) {
+    String country = json['country'] != null ? json['country'] : " ";
+    String city = (json['city'] != null ? json['city'] : " ");
+    String zipCode = (json['zipCode'] != null ? json['zipCode'] : " ");
+    String streetNumber =
+        (json['streetNumber'] != null ? json['streetNumber'] : " ");
+    String street = (json['street'] != null ? json['street'] : " ");
+    Address address = Address(
+        country: country,
+        city: city,
+        zipCode: zipCode,
+        streetNumber: streetNumber,
+        street: street);
+
+    return Business(
+        name: json['name'],
+        address: address,
+        typeOfBusiness: getValue(json['businessType']),
+        openHour: json['openHour'],
+        closeHour: json['closeHour'],
+        email: json['email'],
+        phone: json['phoneNumber']);
+  }
+
 }
 
 class BusinessScrollContent extends StatelessWidget {
