@@ -59,7 +59,16 @@ class BusinessRow extends StatelessWidget {
         child: Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
-            child: Row(
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RestaurantView(business: business,
+
+                              )));
+              },
+              child: Row(
               children: [
                 Container(
                   alignment: Alignment.center,
@@ -106,7 +115,8 @@ class BusinessRow extends StatelessWidget {
                   ),
                 )
               ],
-            )),
+            ),)
+            ),
       ),
     );
   }
