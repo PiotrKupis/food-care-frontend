@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_care/Business.dart';
-import 'package:food_care/Offer.dart';
 import 'package:food_care/Product.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
@@ -92,30 +91,16 @@ class ScrollerTitle extends StatelessWidget {
 
 class ScrollItems extends StatefulWidget {
   @override
-  State createState() {
+  State<StatefulWidget> createState() {
     return _ScrollItems();
   }
 }
 
 class _ScrollItems extends State<ScrollItems> {
-  List<Business> businessList = [];
-  List<Offer> offersList = [];
-
   @override
   Widget build(BuildContext context) {
-    if (businessList.length != 0) {
-      return ListView(
-        scrollDirection: Axis.horizontal,
-        children: [],
-      );
-    } else if (offersList.length != 0) {
-      return ListView(
-        scrollDirection: Axis.horizontal,
-        children: [],
-      );
-    }
     return Container(
-      height: 80,
+      height: 130,
       child: Center(
         child: Text(
           "No options available",
@@ -134,6 +119,135 @@ class _ScrollItems extends State<ScrollItems> {
   }
 }
 
+class ScrollLatestFoodItems extends StatefulWidget {
+  @override
+  State createState() {
+    return _ScrollLatestFoodItems();
+  }
+}
+
+class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
+  Future<List<Product>> getOffers(int num) async {
+    try {
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      dio.options.headers["Authorization"] = '$token';
+      Response response = await dio.get(
+          "https://food-care2.herokuapp.com/product/search_latest",
+          queryParameters: {"quantity": num});
+      if (response.statusCode == 200) {
+        List<dynamic> products = response.data;
+        List<Product> list = [];
+        products.forEach((element) {
+          Map<String, dynamic> map = element;
+          list.add(Product.fromJson(map));
+        });
+        return list;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getOffers(6),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return Container(
+              height: 130,
+              child: Center(
+                child: Text(
+                  "No options available",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+            );
+          } else {
+            List<Product> products = snapshot.data as List<Product>;
+
+            return Container(
+                height: 140,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 125,
+                      color: Colors.white,
+                      child: getProductContainer(products.elementAt(index)),
+                    );
+                  },
+                  itemCount: products.length,
+                  scrollDirection: Axis.horizontal,
+                ));
+          }
+        });
+  }
+
+  Widget getProductContainer(Product product) {
+    return InkWell(
+      onTap: () {},
+      child: Column(
+        children: [
+          Container(
+            child: Card(
+              color: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  side: BorderSide(color: Colors.black)),
+              child: Container(
+                width: 120,
+                height: 120,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Image.network(
+                        product.image,
+                        width: 80,
+                        height: 80,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(product.name,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MainPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -142,7 +256,7 @@ class MainPageContent extends StatelessWidget {
         Column(
           children: [
             ScrollerTitle("Latest offers"),
-            ScrollItems(),
+            ScrollLatestFoodItems(),
             ScrollerTitle("Nearest restaurants"),
             ScrollItems(),
             ScrollerTitle("Best restaurants"),
@@ -171,13 +285,30 @@ class LastPageContent extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
+                  String role = snapshot.data as String;
+                  if (role.compareTo("USER") == 0) {
+                    return Container();
+                  }
                   return addProductButton(context);
                 }
                 return (Container());
               },
               future: getRole(),
             ),
-            businessButton(context),
+            FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  String role = snapshot.data as String;
+                  if (role.compareTo("BUSINESS") == 0) {
+                    return Container();
+                  }
+                  return businessButton(context);
+                }
+                return (Container());
+              },
+              future: getRole(),
+            ),
             businessOfferButton(context),
             logoutButton(context),
           ],
@@ -332,8 +463,12 @@ class LastPageContent extends StatelessWidget {
                 )),
             onPressed: () async {
               List<Product> products = await getBusinessProducts();
-              Navigator.push(context,
-               MaterialPageRoute(builder: (context) => BusinessOffer(products: products,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BusinessOffer(
+                            products: products,
+                          )));
             },
           ),
         ));
@@ -343,8 +478,8 @@ class LastPageContent extends StatelessWidget {
     try {
       var dio = Dio();
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = await prefs.getString("token");
-      int? id = await prefs.getInt("id");
+      String? token = prefs.getString("token");
+      int? id = prefs.getInt("id");
       dio.options.headers["Authorization"] = token;
       Response response = await dio.get(
           "https://food-care2.herokuapp.com/product/get_products_list/" +

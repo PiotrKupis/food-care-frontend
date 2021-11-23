@@ -60,63 +60,66 @@ class BusinessRow extends StatelessWidget {
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RestaurantView(business: business,
-
-                              )));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RestaurantView(
+                              business: business,
+                            )));
               },
               child: Row(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    "${business.name}",
-                    style: TextStyle(fontSize: 20),
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    child: business.typeOfBusiness == BusinessType.RESTAURANT
+                        ? Icon(Icons.restaurant)
+                        : Icon(
+                            Icons.shopping_basket,
+                            size: 40,
+                            color: Colors.amber,
+                          ),
+                    height: 100,
+                    width: 110,
                   ),
-                  height: 100,
-                  width: 110,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  height: 100,
-                  padding: EdgeInsets.all(5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          "${business.address.country}",
-                          style: TextStyle(fontSize: 16),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            "${business.name}",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Center(
-                        child: Text(
-                          "${business.address.city}, ${business.address.street} ${business.address.streetNumber}",
-                          style: TextStyle(fontSize: 16),
+                        SizedBox(
+                          height: 5,
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Center(
-                        child: Text(
-                          "open hours: ${business.openHour} - ${business.closeHour}",
-                          style: TextStyle(fontSize: 16),
+                        Center(
+                          child: Text(
+                            "${business.address.country}, ${business.address.city} ${business.address.zipCode}",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),)
-            ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            " ${business.address.street} ${business.address.streetNumber}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )),
       ),
     );
   }

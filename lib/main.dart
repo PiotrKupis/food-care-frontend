@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/SignUp.dart';
 import 'package:food_care/SignIn.dart';
-import 'package:food_care/MainPage.dart';
 
 void main() {
   runApp(MyApp());

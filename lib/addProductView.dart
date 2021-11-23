@@ -349,7 +349,8 @@ class _AddProductView extends State<AddProductView> {
                             "image": image64
                           });
 
-                      MaterialPageRoute(builder: (context) => MainPage());
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MainPage()));
                     } catch (e) {
                       debugPrint(e.toString());
                     }
