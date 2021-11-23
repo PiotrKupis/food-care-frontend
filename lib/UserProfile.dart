@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/Business.dart';
 import 'package:food_care/addProductView.dart';
 import 'package:food_care/editProductView.dart';
+import 'package:food_care/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'MainPage.dart';
@@ -486,7 +487,13 @@ class _ChangeData extends State<ChangeData> {
                               backgroundColor: Colors.red,
                               textColor: Colors.white,
                               fontSize: 16.0);
-                        }
+
+                        Navigator.push(
+                        context,
+                          MaterialPageRoute(
+                                builder: (context) =>
+                                   MyApp()));
+                            }
                       } catch (e) {
                           print(e);
                           Fluttertoast.showToast(
