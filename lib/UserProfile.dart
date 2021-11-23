@@ -12,11 +12,15 @@ import 'user.dart';
 
 class UserProfile extends StatefulWidget {
  
+  
   @override
   State createState() => _UserProfile();
 }
 
 class _UserProfile extends State<UserProfile> {
+  
+  
+
   static Widget getLogoScreen(String text) {
     return Container(
       height: 140,
