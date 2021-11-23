@@ -20,6 +20,7 @@ class _RestaurantViewState extends State<RestaurantView> {
   
   _RestaurantViewState({required this.business});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +28,10 @@ class _RestaurantViewState extends State<RestaurantView> {
         children: [
           Container(
             width: double.infinity,
-            height: 130,
-            
+            height: 100,
+            padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
             decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.black)) ,
+            //  border: Border(bottom: BorderSide(color: Colors.black)) ,
               color: Color(0xFFF2F3F5),
             ),
             child: Center(
@@ -44,6 +45,33 @@ class _RestaurantViewState extends State<RestaurantView> {
               
             )
           ),
+          Container(
+            width: double.infinity,
+            height: 100,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.black)) ,
+              color: Color(0xFFF2F3F5),
+            ),
+            child: Center(
+              child: business.typeOfBusiness.index == 0 ? //tutaj poprawic
+              Image.asset(
+                  "images/shop.png",
+                  fit: BoxFit.fitHeight,
+                  height: 100,
+                  width: 180,
+              )
+              : 
+              Image.asset(
+                  "images/restaurant-.png",
+                  fit: BoxFit.fitHeight,
+                  height: 100,
+                  width: 180,
+              )
+              
+            )
+          ),
+        
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           
@@ -95,7 +123,7 @@ class _RestaurantViewState extends State<RestaurantView> {
               child:
                 Text(
                   "Address: " + business.address.street + " " +
-                  business.address.streetNumber + " " + 
+                  business.address.streetNumber + ", " + 
                   business.address.city,
 
                   textAlign: TextAlign.center,

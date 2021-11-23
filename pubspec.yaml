@@ -54,6 +54,8 @@ flutter:
   assets:
     - images/breakfast.png
     - images/no_image.jpg
+    - images/restaurant-.png
+    - images/shop.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
