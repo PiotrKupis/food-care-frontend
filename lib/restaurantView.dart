@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:food_care/Business.dart';
 import 'package:food_care/opinionView.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'RestaurantResults.dart';
 import 'offerView.dart';
 
@@ -19,6 +22,21 @@ class _RestaurantViewState extends State<RestaurantView> {
   late Business business;
   
   _RestaurantViewState({required this.business});
+
+  Set<Marker> _markers = {};
+
+  void _onMapCreated(GoogleMapController controller){
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId('id-1'), 
+        position: LatLng(51.782423727644456, 19.452753383126257),
+        infoWindow: InfoWindow(
+          title: '${business.name}',
+          snippet: '${business.openHour}-${business.closeHour}',)
+        ));
+
+    });
+  }
 
 
   @override
@@ -217,7 +235,23 @@ class _RestaurantViewState extends State<RestaurantView> {
               ),
             ),   
           ),
-        
+        Container(
+          width: double.infinity,
+          //padding: EdgeInsets.all(10),
+          height: 350,
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.black)) 
+          ),
+          child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              markers: _markers,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(51.782423727644456, 19.452753383126257),
+                zoom: 15,
+                ),
+            )
+          
+          ),
 
 
         ],
