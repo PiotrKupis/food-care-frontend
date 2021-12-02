@@ -17,6 +17,7 @@ class Business {
   late Address address;
   late BusinessType typeOfBusiness;
   late String openHour, closeHour;
+  late int id;
 
   Business({
     required this.name,
@@ -26,6 +27,7 @@ class Business {
     required this.closeHour,
     required this.email,
     required this.phone,
+    required this.id,
   });
 
   static BusinessType getValue(String name) {
@@ -63,9 +65,9 @@ class Business {
         openHour: json['openHour'],
         closeHour: json['closeHour'],
         email: json['email'],
-        phone: json['phoneNumber']);
+        phone: json['phoneNumber'],
+        id: json['id']);
   }
-
 }
 
 class BusinessScrollContent extends StatelessWidget {
@@ -655,6 +657,7 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                     typeOfBusiness: type,
                     email: email,
                     phone: phone,
+                    id: -1,
                   );
                   Response response;
                   try {
