@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:food_care/Product.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
 import 'package:food_care/addProductView.dart';
+import 'package:food_care/restaurantView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'businessOffer.dart';
 
@@ -116,6 +118,147 @@ class _ScrollItems extends State<ScrollItems> {
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.all(Radius.circular(5))),
     );
+  }
+}
+
+class ScrollBestRestaurant extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _ScrollBestRestaurant();
+  }
+}
+
+class _ScrollBestRestaurant extends State<ScrollBestRestaurant> {
+  Future<List<Business>> getOffers(int num) async {
+    try {
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      dio.options.headers["Authorization"] = '$token';
+      Response response = await dio.get(
+          "https://food-care2.herokuapp.com/business/top_rated",
+          queryParameters: {"quantity": num});
+      if (response.statusCode == 200) {
+        List<dynamic> products = response.data;
+        List<Business> list = [];
+        products.forEach((element) {
+          Map<String, dynamic> map = element;
+          list.add(Business.fromJson(map));
+        });
+        return list;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
+
+  Widget getBusinessContainer(Business business) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RestaurantView(business: business)));
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Card(
+              color: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  side: BorderSide(color: Colors.black)),
+              child: Container(
+                width: 120,
+                height: 120,
+                margin: EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(top: 0),
+                      child: Image.asset(
+                        business.typeOfBusiness == BusinessType.SHOP
+                            ? "images/shop.png"
+                            : "images/restaurant-.png",
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                    Text(
+                      business.name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(business.address.street +
+                        " " +
+                        business.address.streetNumber),
+                    Text(
+                        business.address.city + " " + business.address.zipCode),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getOffers(6),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return Container(
+              height: 130,
+              child: Center(
+                child: Text(
+                  "No options available",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+            );
+          } else {
+            List<Business> businesses = snapshot.data as List<Business>;
+
+            return Container(
+                height: 140,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 125,
+                      color: Colors.white,
+                      child: getBusinessContainer(businesses.elementAt(index)),
+                    );
+                  },
+                  itemCount: businesses.length,
+                  scrollDirection: Axis.horizontal,
+                ));
+          }
+        });
   }
 }
 
@@ -260,7 +403,7 @@ class MainPageContent extends StatelessWidget {
             ScrollerTitle("Nearest restaurants"),
             ScrollItems(),
             ScrollerTitle("Best restaurants"),
-            ScrollItems(),
+            ScrollBestRestaurant(),
           ],
         )
       ],
