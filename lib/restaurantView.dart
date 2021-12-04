@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/Business.dart';
+import 'package:food_care/favoritesView.dart';
 import 'package:food_care/opinionView.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -110,7 +112,58 @@ class _RestaurantViewState extends State<RestaurantView> {
                   //    border: Border(bottom: BorderSide(color: Colors.black))
                   ),
               child: IconButton(
-                  onPressed: () {},
+
+           /*   try {
+                String name = nameController.value.text;
+                var dio = Dio();
+                SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                String? token = sharedPreferences.getString("token");
+                dio.options.headers["Authorization"] = '$token';
+                Response response = await dio.get(
+                    "https://food-care2.herokuapp.com/find_business_by_name/" +
+                        name);
+                if (response.statusCode == 200) {
+                  List<dynamic> businessList = response.data;
+                  List<Business> list = [];
+                  businessList.forEach((element) {
+                    Map<String, dynamic> map = element;
+                    list.add(Business.fromJson(map));
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RestaurantResult(
+                                businessList: list,
+                              )));
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+              }*/
+                  onPressed: () async {
+                    try {
+                      var dio = Dio();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      String? token = prefs.getString("token");
+                      dio.options.headers["Authorization"] = '$token';
+                      Response response = await dio.post("https://food-care2.herokuapp.com/favorite/business",
+                      data: {
+                        "businessId": business.id,
+                      });
+                      if (response.statusCode == 200) {
+                         Fluttertoast.showToast(
+                              msg: "Added to favorites",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                      }
+                    } catch (e) {
+                        debugPrint(e.toString());
+                    }
+                  },
                   icon: Icon(
                     Icons.favorite,
                     color: Colors.red,

@@ -1,3 +1,4 @@
+
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:food_care/addProductView.dart';
 import 'package:food_care/restaurantView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'businessOffer.dart';
+import 'favoritesView.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -23,10 +25,11 @@ class _MainPage extends State<MainPage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final List<Widget> widgetOptions = <Widget>[
     MainPageContent(),
-    Text(
+   /* Text(
       'Index 1: Favourites',
       style: optionStyle,
-    ),
+    ),*/
+    FavoritesRestaurants(),
     SearchRestaurant(),
     LastPageContent(),
   ];
@@ -255,6 +258,174 @@ class _ScrollItems extends State<ScrollItems> {
           }
         });
   }
+}
+
+class FavoritesRestaurants extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _FavoritesRestaurants();
+  }
+  
+}
+
+class _FavoritesRestaurants extends State<FavoritesRestaurants>{
+  Future<List<Business>> getFavoritesRestaurants() async {
+    try {
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      dio.options.headers["Authorization"] = '$token';
+      Response response = await dio.get(
+          "https://food-care2.herokuapp.com/favorite/business",);
+      if (response.statusCode == 200) {
+        List<dynamic> business = response.data;
+        List<Business> list = [];
+        business.forEach((element) {
+          Map<String, dynamic> map = element;
+          list.add(Business.fromJson(map));
+        });
+        return list;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
+
+  Widget getBusinessContainer(Business business) {
+    return Container(
+      width: double.infinity,
+      height: 130,
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Color(0xFFfae3e2).withOpacity(0.3),
+          spreadRadius: 1,
+          blurRadius: 1,
+          offset: Offset(0, 1),
+        )
+      ]),
+      child: Card(
+        borderOnForeground: false,
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            side: BorderSide(color: Colors.black.withOpacity(0.3))),
+        child: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RestaurantView(
+                              business: business,
+                            )));
+              },
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(5),
+                    child: business.typeOfBusiness == BusinessType.RESTAURANT
+                        ? Icon(Icons.restaurant)
+                        : Icon(
+                            Icons.shopping_basket,
+                            size: 40,
+                            color: Colors.amber,
+                          ),
+                    height: 100,
+                    width: 110,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            "${business.name}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            "${business.address.country}, ${business.address.city} ${business.address.zipCode}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Center(
+                          child: Text(
+                            " ${business.address.street} ${business.address.streetNumber}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getFavoritesRestaurants(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return Scaffold(
+               // resizeToAvoidBottomInset: false,
+                body:  Container(
+                        width: double.infinity,
+                        child: Text("Empty products offer",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey)),
+                        alignment: Alignment.center,
+                      ));
+          } else {
+            List<Business> businesses = snapshot.data as List<Business>;
+
+            if (businesses.isEmpty) {
+              return Scaffold(
+               // resizeToAvoidBottomInset: false,
+                body:  Container(
+                        width: double.infinity,
+                        child: Text("Empty products offer",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey)),
+                        alignment: Alignment.center,
+                      ));
+  
+            }
+            return Scaffold(
+              body: ListView.builder(
+              itemBuilder: (context, index) {
+                return BusinessRow(business: businesses.elementAt(index));
+              },
+              itemCount: businesses.length,
+            ));
+          }
+        });
+  }
+  
+
 }
 
 class ScrollBestRestaurant extends StatefulWidget {
@@ -544,6 +715,18 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
       ),
     );
   }
+}
+
+class FavoritesRestaurantsView extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        FavoritesRestaurants(),
+      ],
+    );
+  }
+  
 }
 
 class MainPageContent extends StatelessWidget {
