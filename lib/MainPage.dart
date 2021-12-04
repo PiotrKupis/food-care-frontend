@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_care/Business.dart';
@@ -99,25 +97,163 @@ class ScrollItems extends StatefulWidget {
 }
 
 class _ScrollItems extends State<ScrollItems> {
+  Future<List<Business>> getNearestCities() async {
+    Response? response;
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      dio.options.headers["Authorization"] = '$token';
+      response = await dio.post(
+          "https://food-care2.herokuapp.com/get_nearest_restaurants_list",
+          data: {
+            "city": "",
+            "street": "",
+            "streetNumber": "",
+            "longitude": position.longitude,
+            "latitude": position.latitude
+          });
+      if (response.statusCode == 200) {
+        List<dynamic> products = response.data;
+        List<Business> list = [];
+        products.forEach((element) {
+          Map<String, dynamic> map = element;
+          list.add(Business.fromJson(map));
+        });
+        return list;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
+
+  Widget getBusinessContainer(Business business) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RestaurantView(business: business)));
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            child: Card(
+              color: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
+                  side: BorderSide(color: Colors.black)),
+              child: Container(
+                width: 120,
+                height: 120,
+                margin: EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(top: 0),
+                      child: Image.asset(
+                        business.typeOfBusiness == BusinessType.SHOP
+                            ? "images/shop.png"
+                            : "images/restaurant-.png",
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                    Text(
+                      business.name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(business.address.street +
+                        " " +
+                        business.address.streetNumber),
+                    Text(
+                        business.address.city + " " + business.address.zipCode),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 130,
-      child: Center(
-        child: Text(
-          "No options available",
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ),
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-    );
+    return FutureBuilder(
+        future: getNearestCities(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return Container(
+              height: 130,
+              child: Center(
+                child: Text(
+                  "No options available",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+            );
+          } else {
+            List<Business> businesses = snapshot.data as List<Business>;
+            if (businesses.isEmpty) {
+              return Container(
+                height: 130,
+                child: Center(
+                  child: Text(
+                    "No options available",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+              );
+            }
+            return Container(
+                height: 140,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 125,
+                      color: Colors.white,
+                      child: getBusinessContainer(businesses.elementAt(index)),
+                    );
+                  },
+                  itemCount: businesses.length,
+                  scrollDirection: Axis.horizontal,
+                ));
+          }
+        });
   }
 }
 
@@ -239,6 +375,25 @@ class _ScrollBestRestaurant extends State<ScrollBestRestaurant> {
           } else {
             List<Business> businesses = snapshot.data as List<Business>;
 
+            if (businesses.isEmpty) {
+              return Container(
+                height: 130,
+                child: Center(
+                  child: Text(
+                    "No options available",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+              );
+            }
             return Container(
                 height: 140,
                 margin: const EdgeInsets.all(10.0),
