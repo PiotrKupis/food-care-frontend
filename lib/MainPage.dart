@@ -390,7 +390,7 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
                // resizeToAvoidBottomInset: false,
                 body:  Container(
                         width: double.infinity,
-                        child: Text("Empty products offer",
+                        child: Text("Empty Favorites",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w400,
@@ -405,7 +405,7 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
                // resizeToAvoidBottomInset: false,
                 body:  Container(
                         width: double.infinity,
-                        child: Text("Empty products offer",
+                        child: Text("Empty Favorites",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w400,
