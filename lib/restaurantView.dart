@@ -112,34 +112,6 @@ class _RestaurantViewState extends State<RestaurantView> {
                   //    border: Border(bottom: BorderSide(color: Colors.black))
                   ),
               child: IconButton(
-
-           /*   try {
-                String name = nameController.value.text;
-                var dio = Dio();
-                SharedPreferences sharedPreferences =
-                    await SharedPreferences.getInstance();
-                String? token = sharedPreferences.getString("token");
-                dio.options.headers["Authorization"] = '$token';
-                Response response = await dio.get(
-                    "https://food-care2.herokuapp.com/find_business_by_name/" +
-                        name);
-                if (response.statusCode == 200) {
-                  List<dynamic> businessList = response.data;
-                  List<Business> list = [];
-                  businessList.forEach((element) {
-                    Map<String, dynamic> map = element;
-                    list.add(Business.fromJson(map));
-                  });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RestaurantResult(
-                                businessList: list,
-                              )));
-                }
-              } catch (e) {
-                debugPrint(e.toString());
-              }*/
                   onPressed: () async {
                     try {
                       var dio = Dio();
