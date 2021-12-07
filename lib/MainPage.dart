@@ -1,4 +1,5 @@
 
+import 'package:food_care/productView.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -670,7 +671,12 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
 
   Widget getProductContainer(Product product) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductView(product: product,)));
+      },
       child: Column(
         children: [
           Container(

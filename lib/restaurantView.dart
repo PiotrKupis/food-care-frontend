@@ -317,6 +317,8 @@ class _RestaurantViewState extends State<RestaurantView> {
   }
 }
 
+
+
 /*class RestaurantInfo extends StatefulWidget {
   @override
   State createState() {
