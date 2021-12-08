@@ -14,18 +14,21 @@ import 'offerView.dart';
 
 class RestaurantView extends StatefulWidget {
   late Business business;
-
-  RestaurantView({required this.business});
+  late double lat;
+  late double long;
+  RestaurantView({required this.business, required this.lat, required this.long});
 
   @override
   State<RestaurantView> createState() =>
-      _RestaurantViewState(business: business);
+      _RestaurantViewState(business: business, lat: lat, long: long);
 }
 
 class _RestaurantViewState extends State<RestaurantView> {
   late Business business;
+  late double lat;
+  late double long;
 
-  _RestaurantViewState({required this.business});
+  _RestaurantViewState({required this.business, required this.lat, required this.long});
 
   Set<Marker> _markers = {};
   double ratingValue = 0.0;
@@ -34,7 +37,7 @@ class _RestaurantViewState extends State<RestaurantView> {
     setState(() {
       _markers.add(Marker(
           markerId: MarkerId('id-1'),
-          position: LatLng(51.782423727644456, 19.452753383126257),
+          position: LatLng(lat, long),
           infoWindow: InfoWindow(
             title: '${business.name}',
             snippet: '${business.openHour}-${business.closeHour}',
@@ -307,7 +310,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                 onMapCreated: _onMapCreated,
                 markers: _markers,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(51.782423727644456, 19.452753383126257),
+                  target: LatLng(lat, long),
                   zoom: 15,
                 ),
               )),

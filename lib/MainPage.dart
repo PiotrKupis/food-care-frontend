@@ -1,5 +1,6 @@
 
 import 'package:food_care/productView.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -136,11 +137,14 @@ class _ScrollItems extends State<ScrollItems> {
 
   Widget getBusinessContainer(Business business) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+                var addresses = await Geocoder.local.findAddressesFromQuery(query);
+                var first = addresses.first;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RestaurantView(business: business)));
+                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -316,12 +320,15 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
+                final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+                var addresses = await Geocoder.local.findAddressesFromQuery(query);
+                var first = addresses.first;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => RestaurantView(
-                              business: business,
+                              business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,
                             )));
               },
               child: Row(
@@ -463,11 +470,14 @@ class _ScrollBestRestaurant extends State<ScrollBestRestaurant> {
 
   Widget getBusinessContainer(Business business) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+                var addresses = await Geocoder.local.findAddressesFromQuery(query);
+                var first = addresses.first;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RestaurantView(business: business)));
+                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
