@@ -1,7 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:geocoder/geocoder.dart';
 import 'Business.dart';
+import 'restaurantView.dart';
 
 class RestaurantResult extends StatefulWidget {
   late List<Business> businessList;
@@ -60,6 +64,32 @@ class BusinessRow extends StatelessWidget {
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
               onTap: () async {
+                try {
+                    var dio = Dio();
+                    SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                    String? token = prefs.getString("token");
+                    dio.options.headers["Authorization"] = '$token';
+                    Response response;
+                    response = await dio.get(
+                                  "https://food-care2.herokuapp.com/rating/business/${business.id}");
+                              
+                    if(response.statusCode == 200){
+                        Map<String, dynamic> map = response.data;
+                        double rating = map.values.elementAt(1);
+                         List<Location> locations = await locationFromAddress("${business.address.streetNumber} ${business.address.street}, ${business.address.city}");
+                        double lat = locations[0].latitude;
+                        double long = locations[0].longitude;
+                      
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RestaurantView(business: business, lat: lat, long: long, rating: rating,)));
+                            }
+                  } catch (e) {
+                    debugPrint(e.toString());
+                  }
+               
                 /*final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
                 var addresses = await Geocoder.local.findAddressesFromQuery(query);
                 var first = addresses.first;

@@ -47,11 +47,11 @@ class _ProductView extends State<ProductView> {
             child: Card(
               color: Colors.white,
               elevation: 0,
-              shape: RoundedRectangleBorder(
+            /*  shape: RoundedRectangleBorder(
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5.0),
                   ),
-                  side: BorderSide(color: Colors.black)),
+                  side: BorderSide(color: Colors.black)),*/
               child: Container(
                 width: 120,
                 height: 120,

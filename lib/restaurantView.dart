@@ -16,19 +16,22 @@ class RestaurantView extends StatefulWidget {
   late Business business;
   late double lat;
   late double long;
-  RestaurantView({required this.business, required this.lat, required this.long});
+  late double rating;
+
+  RestaurantView({required this.business, required this.lat, required this.long, required this.rating});
 
   @override
   State<RestaurantView> createState() =>
-      _RestaurantViewState(business: business, lat: lat, long: long);
+      _RestaurantViewState(business: business, lat: lat, long: long, rating: rating);
 }
 
 class _RestaurantViewState extends State<RestaurantView> {
   late Business business;
   late double lat;
   late double long;
+  late double rating;
 
-  _RestaurantViewState({required this.business, required this.lat, required this.long});
+  _RestaurantViewState({required this.business, required this.lat, required this.long, required this.rating});
 
   Set<Marker> _markers = {};
   double ratingValue = 0.0;
@@ -292,13 +295,33 @@ class _RestaurantViewState extends State<RestaurantView> {
             height: 50,
             decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Colors.black))),
-            child: Text(
-              "Opinion: ",
+            child: rating == 0.0 ?  
+            
+            Text(
+              "No opinion",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            )
+            :
+            Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+              "Opinion: " + rating.toString() + "/5",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 22,
               ),
             ),
+              Icon(Icons.star, color: Colors.yellow, size: 25,),
+              
+            ]
+          )
+            
+
+            
           ),
           Container(
               width: double.infinity,
