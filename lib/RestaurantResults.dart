@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_care/restaurantView.dart';
-import 'package:geocoder/geocoder.dart';
+//import 'package:geocoder/geocoder.dart';
 import 'Business.dart';
 
 class RestaurantResult extends StatefulWidget {
@@ -61,7 +60,7 @@ class BusinessRow extends StatelessWidget {
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
               onTap: () async {
-                final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+                /*final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
                 var addresses = await Geocoder.local.findAddressesFromQuery(query);
                 var first = addresses.first;
                 Navigator.push(
@@ -69,7 +68,7 @@ class BusinessRow extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => RestaurantView(
                               business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,
-                            )));
+                            )));*/
               },
               child: Row(
                 children: [

@@ -1,7 +1,7 @@
-
 import 'package:food_care/productView.dart';
-import 'package:geocoder/geocoder.dart';
+//import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:food_care/Business.dart';
@@ -9,7 +9,6 @@ import 'package:food_care/Product.dart';
 import 'package:food_care/SearchRestaurant.dart';
 import 'package:food_care/UserProfile.dart';
 import 'package:food_care/addProductView.dart';
-import 'package:food_care/restaurantView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'businessOffer.dart';
 import 'favoritesView.dart';
@@ -27,10 +26,6 @@ class _MainPage extends State<MainPage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final List<Widget> widgetOptions = <Widget>[
     MainPageContent(),
-   /* Text(
-      'Index 1: Favourites',
-      style: optionStyle,
-    ),*/
     FavoritesRestaurants(),
     SearchRestaurant(),
     LastPageContent(),
@@ -111,14 +106,20 @@ class _ScrollItems extends State<ScrollItems> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("token");
       dio.options.headers["Authorization"] = '$token';
+      double longitude = position.longitude;
+      double latitude = position.latitude;
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
+      print(placemarks.toString());
+      List<String> street = placemarks.first.street!.split(" ");
       response = await dio.post(
           "https://food-care2.herokuapp.com/get_nearest_restaurants_list",
           data: {
-            "city": "",
-            "street": "",
-            "streetNumber": "",
-            "longitude": position.longitude,
-            "latitude": position.latitude
+            "city": placemarks.first.locality,
+            "street": street.first,
+            "streetNumber": street.last,
+            "longitude": longitude,
+            "latitude": latitude
           });
       if (response.statusCode == 200) {
         List<dynamic> products = response.data;
@@ -138,13 +139,13 @@ class _ScrollItems extends State<ScrollItems> {
   Widget getBusinessContainer(Business business) {
     return InkWell(
       onTap: () async {
-        final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+        /*final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
                 var addresses = await Geocoder.local.findAddressesFromQuery(query);
                 var first = addresses.first;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));
+                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));*/
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -265,15 +266,14 @@ class _ScrollItems extends State<ScrollItems> {
   }
 }
 
-class FavoritesRestaurants extends StatefulWidget{
+class FavoritesRestaurants extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _FavoritesRestaurants();
   }
-  
 }
 
-class _FavoritesRestaurants extends State<FavoritesRestaurants>{
+class _FavoritesRestaurants extends State<FavoritesRestaurants> {
   Future<List<Business>> getFavoritesRestaurants() async {
     try {
       var dio = Dio();
@@ -281,7 +281,8 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
       String? token = prefs.getString("token");
       dio.options.headers["Authorization"] = '$token';
       Response response = await dio.get(
-          "https://food-care2.herokuapp.com/favorite/business",);
+        "https://food-care2.herokuapp.com/favorite/business",
+      );
       if (response.statusCode == 200) {
         List<dynamic> business = response.data;
         List<Business> list = [];
@@ -321,7 +322,7 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
               onTap: () async {
-                final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+                /*final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
                 var addresses = await Geocoder.local.findAddressesFromQuery(query);
                 var first = addresses.first;
                 Navigator.push(
@@ -329,7 +330,7 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
                     MaterialPageRoute(
                         builder: (context) => RestaurantView(
                               business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,
-                            )));
+                            )));*/
               },
               child: Row(
                 children: [
@@ -387,7 +388,6 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -395,35 +395,34 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
         builder: (context, snapshot) {
           if (snapshot.hasData == false) {
             return Scaffold(
-               // resizeToAvoidBottomInset: false,
-                body:  Container(
-                        width: double.infinity,
-                        child: Text(" ",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey)),
-                        alignment: Alignment.center,
-                      ));
+                // resizeToAvoidBottomInset: false,
+                body: Container(
+              width: double.infinity,
+              child: Text(" ",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey)),
+              alignment: Alignment.center,
+            ));
           } else {
             List<Business> businesses = snapshot.data as List<Business>;
 
             if (businesses.isEmpty) {
               return Scaffold(
-               // resizeToAvoidBottomInset: false,
-                body:  Container(
-                        width: double.infinity,
-                        child: Text("Empty Favorites",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey)),
-                        alignment: Alignment.center,
-                      ));
-  
+                  // resizeToAvoidBottomInset: false,
+                  body: Container(
+                width: double.infinity,
+                child: Text("Empty Favorites",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey)),
+                alignment: Alignment.center,
+              ));
             }
             return Scaffold(
-              body: ListView.builder(
+                body: ListView.builder(
               itemBuilder: (context, index) {
                 return BusinessRow(business: businesses.elementAt(index));
               },
@@ -432,8 +431,6 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants>{
           }
         });
   }
-  
-
 }
 
 class ScrollBestRestaurant extends StatefulWidget {
@@ -471,13 +468,13 @@ class _ScrollBestRestaurant extends State<ScrollBestRestaurant> {
   Widget getBusinessContainer(Business business) {
     return InkWell(
       onTap: () async {
-        final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
+        /*final query = "${business.address.streetNumber} ${business.address.street}, ${business.address.city}";
                 var addresses = await Geocoder.local.findAddressesFromQuery(query);
                 var first = addresses.first;
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));
+                builder: (context) => RestaurantView(business: business, lat: first.coordinates.latitude, long: first.coordinates.longitude,)));*/
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -638,7 +635,7 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
         builder: (context, snapshot) {
           if (snapshot.hasData == false) {
             return Container(
-              height: 130,
+              height: 140,
               child: Center(
                 child: Text(
                   "No options available",
@@ -658,7 +655,7 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
             List<Product> products = snapshot.data as List<Product>;
 
             return Container(
-                height: 140,
+                height: 150,
                 margin: const EdgeInsets.all(10.0),
                 padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -667,7 +664,7 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return Container(
-                      height: 125,
+                      height: 135,
                       color: Colors.white,
                       child: getProductContainer(products.elementAt(index)),
                     );
@@ -685,7 +682,9 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ProductView(product: product,)));
+                builder: (context) => ProductView(
+                      product: product,
+                    )));
       },
       child: Column(
         children: [
@@ -699,8 +698,8 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
                   ),
                   side: BorderSide(color: Colors.black)),
               child: Container(
-                width: 120,
-                height: 120,
+                width: 130,
+                height: 130,
                 child: Column(
                   children: <Widget>[
                     Container(
@@ -733,7 +732,7 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
   }
 }
 
-class FavoritesRestaurantsView extends StatelessWidget{
+class FavoritesRestaurantsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -742,7 +741,6 @@ class FavoritesRestaurantsView extends StatelessWidget{
       ],
     );
   }
-  
 }
 
 class MainPageContent extends StatelessWidget {
