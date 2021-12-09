@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/SignUp.dart';
 import 'package:food_care/SignIn.dart';
+import 'package:food_care/stripe.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = StripePayment.key;
   runApp(MyApp());
 }
 

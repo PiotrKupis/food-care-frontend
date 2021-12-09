@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/Product.dart';
+import 'package:food_care/stripe.dart';
 import 'package:intl/intl.dart';
 
 import 'Business.dart';
@@ -47,11 +48,6 @@ class _ProductView extends State<ProductView> {
             child: Card(
               color: Colors.white,
               elevation: 0,
-            /*  shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                  side: BorderSide(color: Colors.black)),*/
               child: Container(
                 width: 120,
                 height: 120,
@@ -162,7 +158,10 @@ class _ProductView extends State<ProductView> {
                     fontSize: 25.0,
                   ),
                 )),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (builder) => ItemPayView()));
+            },
           ),
         ));
   }
