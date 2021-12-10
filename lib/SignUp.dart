@@ -3,7 +3,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/SignIn.dart';
 import 'package:dio/dio.dart';
-import 'dart:async';
 
 class SignUp extends StatefulWidget {
   @override

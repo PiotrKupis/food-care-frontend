@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Product.dart';
 
 class StripePayment {
   static const String key =
@@ -13,6 +17,9 @@ class StripePayment {
 }
 
 class ItemPayView extends StatefulWidget {
+  final Product product;
+  ItemPayView({required this.product});
+
   @override
   State<StatefulWidget> createState() {
     return _ItemPayView();
@@ -23,17 +30,35 @@ class _ItemPayView extends State<ItemPayView> {
   Map<String, dynamic>? paymentIntentData;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          ElevatedButton(
-              onPressed: () async {
-                await makePayment();
-              },
-              child: Text("Kk")),
-        ],
+    return ElevatedButton(
+      onPressed: () async {
+        await makePayment();
+      },
+      style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 60)),
+      child: Text(
+        "Buy",
+        style: TextStyle(fontSize: 32),
       ),
     );
+  }
+
+  Future<void> addOrder() async {
+    try {
+      var dio = Dio();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      int? id = prefs.getInt("id");
+      dio.options.headers["Authorization"] = '$token';
+      Response response = await dio
+          .post("https://food-care2.herokuapp.com/order/add_order", data: {
+        "userId": id!,
+        "productId": widget.product.id,
+        "businessId": widget.product.ownerId
+      });
+      if (response.statusCode == 200) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   createPaymentIntent(String amount) async {
@@ -55,7 +80,6 @@ class _ItemPayView extends State<ItemPayView> {
       }
     } catch (e) {
       debugPrint(e.toString());
-      print("WWw");
     }
   }
 
@@ -70,10 +94,10 @@ class _ItemPayView extends State<ItemPayView> {
               style: ThemeMode.dark,
               merchantCountryCode: 'PL',
               merchantDisplayName: 'Food_Care'));
+      await addOrder();
       displayPaymentSheet();
     } catch (e) {
       debugPrint(e.toString());
-      print("OK");
     }
   }
 

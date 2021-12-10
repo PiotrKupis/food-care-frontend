@@ -1,3 +1,4 @@
+import 'package:food_care/main.dart';
 import 'package:food_care/productView.dart';
 import 'package:food_care/restaurantView.dart';
 //import 'package:geocoder/geocoder.dart';
@@ -868,7 +869,33 @@ class LastPageContent extends StatelessWidget {
                   }
                   return businessButton(context);
                 }
-                return (Container());
+                return Container();
+              },
+              future: getRole(),
+            ),
+            FutureBuilder(
+              builder: (builder, snapshot) {
+                if (snapshot.hasData) {
+                  String role = snapshot.data as String;
+                  if (role.compareTo("BUSINESS") == 0) {
+                    return Container();
+                  }
+                  return getUserOrders(context);
+                }
+                return Container();
+              },
+              future: getRole(),
+            ),
+            FutureBuilder(
+              builder: (builder, snapshot) {
+                if (snapshot.hasData) {
+                  String role = snapshot.data as String;
+                  if (role.compareTo("BUSINESS") == 0) {
+                    return getBusinessOrders(context);
+                  }
+                  return Container();
+                }
+                return Container();
               },
               future: getRole(),
             ),
@@ -885,29 +912,16 @@ class LastPageContent extends StatelessWidget {
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
           width: double.infinity,
-          decoration: new BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(color: Color(0xFF6F6462)),
-                BoxShadow(color: Color(0xFFBBAA92))
-              ],
-              gradient: new LinearGradient(
-                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
-                begin: const FractionalOffset(0.2, 0.2),
-                end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )),
-          child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Color(0xFFf7418c),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
                   "EDIT PROFILE",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0,
+                    fontSize: 24.0,
                   ),
                 )),
             onPressed: () => {
@@ -923,29 +937,16 @@ class LastPageContent extends StatelessWidget {
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
           width: double.infinity,
-          decoration: new BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(color: Color(0xFF6F6462)),
-                BoxShadow(color: Color(0xFFBBAA92))
-              ],
-              gradient: new LinearGradient(
-                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
-                begin: const FractionalOffset(0.2, 0.2),
-                end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )),
-          child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Color(0xFFf7418c),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
                   "ADD PRODUCT",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0,
+                    fontSize: 24.0,
                   ),
                 )),
             onPressed: () => {
@@ -961,29 +962,16 @@ class LastPageContent extends StatelessWidget {
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
           width: double.infinity,
-          decoration: new BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(color: Color(0xFF6F6462)),
-                BoxShadow(color: Color(0xFFBBAA92))
-              ],
-              gradient: new LinearGradient(
-                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
-                begin: const FractionalOffset(0.2, 0.2),
-                end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )),
-          child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Color(0xFFf7418c),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
                   "BUSINESS",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0,
+                    fontSize: 24.0,
                   ),
                 )),
             onPressed: () {
@@ -999,29 +987,16 @@ class LastPageContent extends StatelessWidget {
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
           width: double.infinity,
-          decoration: new BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(color: Color(0xFF6F6462)),
-                BoxShadow(color: Color(0xFFBBAA92))
-              ],
-              gradient: new LinearGradient(
-                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
-                begin: const FractionalOffset(0.2, 0.2),
-                end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )),
-          child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Color(0xFFf7418c),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
                   "BUSINESS OFFER",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0,
+                    fontSize: 24.0,
                   ),
                 )),
             onPressed: () async {
@@ -1066,24 +1041,11 @@ class LastPageContent extends StatelessWidget {
         padding: EdgeInsets.only(top: 40, left: 25, right: 25),
         child: Container(
           width: double.infinity,
-          decoration: new BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(color: Color(0xFF6F6462)),
-                BoxShadow(color: Color(0xFFBBAA92))
-              ],
-              gradient: new LinearGradient(
-                colors: [Color(0xFF6F6462), Color(0xFFBBAA92)],
-                begin: const FractionalOffset(0.2, 0.2),
-                end: const FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )),
-          child: MaterialButton(
-            highlightColor: Colors.transparent,
-            splashColor: Color(0xFFf7418c),
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
             child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
                   "LOG OUT",
                   style: TextStyle(
@@ -1091,7 +1053,89 @@ class LastPageContent extends StatelessWidget {
                     fontSize: 25.0,
                   ),
                 )),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => MyHomePage(title: "Food Care")),
+                  (route) => false);
+            },
+          ),
+        ));
+  }
+
+  Widget getUserOrders(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
+                child: Text(
+                  "CHECK MY ORDERS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () async {
+              try {
+                var dio = Dio();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? token = prefs.getString("token");
+                int? id = prefs.getInt("id");
+                dio.options.headers["Authorization"] = token;
+                Response response = await dio.get(
+                    "https://food-care2.herokuapp.com/order/get_orders_by_userId/" +
+                        id.toString());
+                if (response.statusCode == 200) {
+                  debugPrint(response.data.toString());
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+              }
+            },
+          ),
+        ));
+  }
+
+  Widget getBusinessOrders(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(top: 40, left: 25, right: 25),
+        child: Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(elevation: 5, primary: Colors.orange),
+            child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
+                child: Text(
+                  "MY SALED ORDERS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                  ),
+                )),
+            onPressed: () async {
+              try {
+                var dio = Dio();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? token = prefs.getString("token");
+                int? id = prefs.getInt("id");
+                dio.options.headers["Authorization"] = token;
+                Response response = await dio.get(
+                    "https://food-care2.herokuapp.com/order/get_orders_by_businessId/" +
+                        id.toString());
+                if (response.statusCode == 200) {
+                  debugPrint(response.data.toString());
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+              }
+            },
           ),
         ));
   }
