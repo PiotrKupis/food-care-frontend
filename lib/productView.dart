@@ -127,7 +127,7 @@ class _ProductView extends State<ProductView> {
             builder: (builder, snapshot) {
               if (snapshot.hasData) {
                 String? user = snapshot.data.toString();
-                if (user.compareTo("BUSINESS") == 0) {
+                if (user.compareTo("BUSINESS") != 0) {
                   return buyButton(context);
                 }
               }
