@@ -1092,7 +1092,18 @@ class LastPageContent extends StatelessWidget {
                     "https://food-care2.herokuapp.com/order/get_orders_by_userId/" +
                         id.toString());
                 if (response.statusCode == 200) {
-                  debugPrint(response.data.toString());
+                  List<dynamic> productList = response.data;
+                  List<Product> list = [];
+                  productList.forEach((element) {
+                    Map<String, dynamic> map = element;
+                    list.add(Product.fromJson(map));
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => UserBoughtItems(
+                                products: list,
+                              )));
                 }
               } catch (e) {
                 debugPrint(e.toString());
@@ -1130,7 +1141,18 @@ class LastPageContent extends StatelessWidget {
                     "https://food-care2.herokuapp.com/order/get_orders_by_businessId/" +
                         id.toString());
                 if (response.statusCode == 200) {
-                  debugPrint(response.data.toString());
+                  List<dynamic> productList = response.data;
+                  List<Product> list = [];
+                  productList.forEach((element) {
+                    Map<String, dynamic> map = element;
+                    list.add(Product.fromJson(map));
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => BusinessSales(
+                                products: list,
+                              )));
                 }
               } catch (e) {
                 debugPrint(e.toString());

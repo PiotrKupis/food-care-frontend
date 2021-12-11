@@ -3,7 +3,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/main.dart';
+import 'package:food_care/productView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Product.dart';
 import 'user.dart';
 
 class UserProfile extends StatefulWidget {
@@ -670,4 +672,42 @@ Widget nameInput(
       ),
     ),
   ));
+}
+
+class UserBoughtItems extends StatelessWidget {
+  final List<Product> products;
+
+  const UserBoughtItems({Key? key, required this.products}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BusinessSales(products: products);
+  }
+}
+
+class BusinessSales extends StatelessWidget {
+  final List<Product> products;
+
+  const BusinessSales({Key? key, required this.products}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: products.length != 0
+            ? ListView.builder(
+                itemBuilder: (itemBuilder, index) {
+                  return ProductRow(product: products.elementAt(index));
+                },
+                itemCount: products.length,
+              )
+            : Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Text(
+                  "Empty list",
+                  style: TextStyle(fontSize: 18),
+                ),
+                alignment: Alignment.center,
+              ));
+  }
 }

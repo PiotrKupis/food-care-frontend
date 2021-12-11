@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_care/Product.dart';
 import 'package:food_care/stripe.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Business.dart';
 
@@ -121,19 +123,36 @@ class _ProductView extends State<ProductView> {
                   ),
                 ),
               )),
-          buyButton(context)
+          FutureBuilder(
+            builder: (builder, snapshot) {
+              if (snapshot.hasData) {
+                String? user = snapshot.data.toString();
+                if (user.compareTo("BUSINESS") == 0) {
+                  return buyButton(context);
+                }
+              }
+              return Container();
+            },
+            future: getRole(),
+          )
         ],
       ),
     ));
   }
 
+  Future<String?> getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("role");
+  }
+
   Widget buyButton(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 27, right: 15, left: 15, bottom: 10),
-      child: ItemPayView(product: product,),
+      child: ItemPayView(
+        product: product,
+      ),
     );
   }
-
 }
 
 class ProductResults extends StatelessWidget {
@@ -221,6 +240,72 @@ class ProductResultsRow extends StatelessWidget {
                 ],
               ),
             )),
+      ),
+    );
+  }
+}
+
+class ProductRow extends StatelessWidget {
+  final Product product;
+
+  ProductRow({required this.product});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 130,
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Color(0xFFfae3e2).withOpacity(0.3),
+          spreadRadius: 1,
+          blurRadius: 1,
+          offset: Offset(0, 1),
+        )
+      ]),
+      child: Card(
+        borderOnForeground: false,
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            side: BorderSide(color: Colors.black.withOpacity(0.3))),
+        child: Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
+          child: Row(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(5),
+                child: Image.network(
+                  product.image,
+                  fit: BoxFit.fitHeight,
+                ),
+                height: 100,
+                width: 110,
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: 100,
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        "${product.name}",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

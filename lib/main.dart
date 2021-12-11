@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Color(0xFFF6F6F1),
             )
           ],
-        ))) // This trailing comma makes auto-formatting nicer for build methods.
+        ))) 
         );
   }
 

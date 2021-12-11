@@ -279,7 +279,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => OfferView(),
+                            builder: (context) => OfferView(business: business,),
                           ));
                     },
                     icon: Icon(

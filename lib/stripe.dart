@@ -42,7 +42,7 @@ class _ItemPayView extends State<ItemPayView> {
     );
   }
 
-  Future<void> addOrder() async {
+  Future<bool> addOrder() async {
     try {
       var dio = Dio();
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,10 +55,13 @@ class _ItemPayView extends State<ItemPayView> {
         "productId": widget.product.id,
         "businessId": widget.product.ownerId
       });
-      if (response.statusCode == 200) {}
+      if (response.statusCode == 200) {
+        return true;
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
+    return false;
   }
 
   createPaymentIntent(String amount) async {
@@ -85,7 +88,9 @@ class _ItemPayView extends State<ItemPayView> {
 
   Future<void> makePayment() async {
     try {
-      paymentIntentData = await createPaymentIntent("20");
+      paymentIntentData =
+          await createPaymentIntent(widget.product.discountedPrice.toString());
+      print(paymentIntentData == null);
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
               paymentIntentClientSecret: paymentIntentData!["client_secret"],
@@ -127,6 +132,7 @@ class _ItemPayView extends State<ItemPayView> {
 }
 
 calculateAmount(String amount) {
-  final a = (int.parse(amount)) * 100;
-  return a.toString();
+  final a = double.parse(amount) * 100;
+  print(a);
+  return a.round().toString();
 }
