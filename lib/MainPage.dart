@@ -783,6 +783,7 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
                       height: 10,
                     ),
                     Container(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                       alignment: Alignment.bottomCenter,
                       child: Text(product.name,
                           style: TextStyle(
