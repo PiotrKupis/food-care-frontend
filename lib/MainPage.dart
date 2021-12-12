@@ -1,7 +1,6 @@
 import 'package:food_care/main.dart';
 import 'package:food_care/productView.dart';
 import 'package:food_care/restaurantView.dart';
-//import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:dio/dio.dart';
@@ -900,7 +899,19 @@ class LastPageContent extends StatelessWidget {
               },
               future: getRole(),
             ),
-            businessOfferButton(context),
+            FutureBuilder(
+              builder: (builder, snapshot) {
+                if (snapshot.hasData) {
+                  String role = snapshot.data as String;
+                  if (role.compareTo("BUSINESS") == 0) {
+                    return businessOfferButton(context);
+                  }
+                  return Container();
+                }
+                return Container();
+              },
+              future: getRole(),
+            ),
             logoutButton(context),
           ],
         )

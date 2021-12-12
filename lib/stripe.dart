@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:food_care/MainPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +33,20 @@ class _ItemPayView extends State<ItemPayView> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        await makePayment();
+        bool check = await makePayment();
+        if (check) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (builder) => MainPage()));
+        } else {
+          Fluttertoast.showToast(
+              msg: "Couldn't pay for item",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
       },
       style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 60)),
       child: Text(
@@ -86,11 +100,13 @@ class _ItemPayView extends State<ItemPayView> {
     }
   }
 
-  Future<void> makePayment() async {
+  Future<bool> makePayment() async {
     try {
       paymentIntentData =
           await createPaymentIntent(widget.product.discountedPrice.toString());
-      print(paymentIntentData == null);
+      if (paymentIntentData == null) {
+        return false;
+      }
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
               paymentIntentClientSecret: paymentIntentData!["client_secret"],
@@ -99,11 +115,13 @@ class _ItemPayView extends State<ItemPayView> {
               style: ThemeMode.dark,
               merchantCountryCode: 'PL',
               merchantDisplayName: 'Food_Care'));
-      await addOrder();
-      displayPaymentSheet();
+      bool check = await addOrder();
+      await displayPaymentSheet();
+      return check;
     } catch (e) {
       debugPrint(e.toString());
     }
+    return false;
   }
 
   displayPaymentSheet() async {
@@ -133,6 +151,5 @@ class _ItemPayView extends State<ItemPayView> {
 
 calculateAmount(String amount) {
   final a = double.parse(amount) * 100;
-  print(a);
   return a.round().toString();
 }

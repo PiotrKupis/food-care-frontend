@@ -31,34 +31,32 @@ class _ProductView extends State<ProductView> {
               width: double.infinity,
               height: 100,
               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                color: Color(0xFFF2F3F5),
-              ),
-              child: Center(
-                child: Text(
-                  product.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    product.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 32,
+                    ),
                   ),
-                ),
+                ],
               )),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Card(
-              color: Colors.white,
+              color: Colors.transparent,
               elevation: 0,
               child: Container(
-                width: 120,
-                height: 120,
+                width: 140,
+                height: 140,
                 child: Column(
                   children: <Widget>[
                     Container(
                       child: Image.network(
                         product.image,
-                        width: 120,
-                        height: 120,
+                        width: 140,
+                        height: 140,
                       ),
                     ),
                   ],
@@ -69,27 +67,25 @@ class _ProductView extends State<ProductView> {
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Card(
-              color: Colors.black12,
+              color: Colors.transparent,
               elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5.0),
-                  ),
-                  side: BorderSide(color: Colors.black)),
               child: Container(
-                width: 200,
-                height: 120,
+                width: 140,
+                height: 100,
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Text(
-                        product.regularPrice.toString() + " zł",
-                        style: TextStyle(
-                            fontSize: 25,
-                            decoration: TextDecoration.lineThrough),
-                      ),
-                    ),
+                    product.regularPrice != product.discountedPrice
+                        ? Container(
+                            child: Text(
+                              product.regularPrice.toString() + " zł",
+                              style: TextStyle(
+                                  fontSize: 32,
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        : SizedBox(),
                     SizedBox(
                       height: 10,
                     ),
@@ -97,9 +93,9 @@ class _ProductView extends State<ProductView> {
                       alignment: Alignment.bottomCenter,
                       child: Text(product.discountedPrice.toString() + " zł",
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 33,
-                          )),
+                              color: Colors.black,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -108,19 +104,22 @@ class _ProductView extends State<ProductView> {
           ),
           Container(
               width: double.infinity,
-              height: 80,
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black)),
-                //  color: Color(0xFFF2F3F5),
-              ),
+              height: 50,
               child: Center(
                 child: Text(
                   "Expiration date: " + product.expirationDate,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              )),
+          Container(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: Text(
+                  "Vegan : " + (product.isVegan ? "Yes" : "No"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               )),
           FutureBuilder(
@@ -163,12 +162,22 @@ class ProductResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
-      itemBuilder: (builder, index) {
-        return ProductResultsRow(product: products.elementAt(index));
-      },
-      itemCount: products.length,
-    ));
+        body: products.length != 0
+            ? ListView.builder(
+                itemBuilder: (builder, index) {
+                  return ProductResultsRow(product: products.elementAt(index));
+                },
+                itemCount: products.length,
+              )
+            : Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Text(
+                  "Empty list",
+                  style: TextStyle(fontSize: 28),
+                ),
+                alignment: Alignment.center,
+              ));
   }
 }
 
@@ -230,9 +239,6 @@ class ProductResultsRow extends StatelessWidget {
                             "${product.name}",
                             style: TextStyle(fontSize: 16),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
                         ),
                       ],
                     ),

@@ -44,7 +44,7 @@ class BusinessRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 130,
+      height: 140,
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
           color: Color(0xFFfae3e2).withOpacity(0.3),
@@ -65,53 +65,58 @@ class BusinessRow extends StatelessWidget {
             padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
             child: InkWell(
               onTap: () async {
-                 try {
-                    var dio = Dio();
-                    SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                    String? token = prefs.getString("token");
-                    dio.options.headers["Authorization"] = '$token';
-                    Response response;
-                    response = await dio.get(
-                                  "https://food-care2.herokuapp.com/rating/business/${business.id}");
-                              
-                    if(response.statusCode == 200){
-                        Map<String, dynamic> map = response.data;
-                        double rating = map.values.elementAt(1);
-                         List<Location> locations = await locationFromAddress("${business.address.streetNumber} ${business.address.street}, ${business.address.city}");
-                        double lat = locations[0].latitude;
-                        double long = locations[0].longitude;
-                      
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RestaurantView(business: business, lat: lat, long: long, rating: rating,)));
-                            }
-                  } catch (e) {
-                    debugPrint(e.toString());
+                try {
+                  var dio = Dio();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  String? token = prefs.getString("token");
+                  dio.options.headers["Authorization"] = '$token';
+                  Response response;
+                  response = await dio.get(
+                      "https://food-care2.herokuapp.com/rating/business/${business.id}");
+
+                  if (response.statusCode == 200) {
+                    Map<String, dynamic> map = response.data;
+                    double rating = map.values.elementAt(1);
+                    List<Location> locations = await locationFromAddress(
+                        "${business.address.streetNumber} ${business.address.street}, ${business.address.city}");
+                    double lat = locations[0].latitude;
+                    double long = locations[0].longitude;
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RestaurantView(
+                                  business: business,
+                                  lat: lat,
+                                  long: long,
+                                  rating: rating,
+                                )));
                   }
-                },
+                } catch (e) {
+                  debugPrint(e.toString());
+                }
+              },
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(5),
-                    child: business.typeOfBusiness == BusinessType.RESTAURANT
-                        ? Icon(Icons.restaurant)
-                        : Icon(
-                            Icons.shopping_basket,
-                            size: 40,
-                            color: Colors.amber,
-                          ),
-                    height: 100,
-                    width: 110,
+                    width: MediaQuery.of(context).size.width * 2 / 6,
+                    height: 140,
+                    child: Image.asset(
+                      business.typeOfBusiness == BusinessType.SHOP
+                          ? "images/shop.png"
+                          : "images/restaurant-.png",
+                      width: 50,
+                      height: 50,
+                    ),
                   ),
                   Container(
                     alignment: Alignment.center,
                     height: 100,
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    width: MediaQuery.of(context).size.width * 2 / 5,
+                    child: Wrap(
                       children: [
                         Center(
                           child: Text(
@@ -119,17 +124,11 @@ class BusinessRow extends StatelessWidget {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                        SizedBox(
-                          height: 5,
-                        ),
                         Center(
                           child: Text(
                             "${business.address.country}, ${business.address.city} ${business.address.zipCode}",
                             style: TextStyle(fontSize: 16),
                           ),
-                        ),
-                        SizedBox(
-                          height: 5,
                         ),
                         Center(
                           child: Text(
@@ -138,6 +137,18 @@ class BusinessRow extends StatelessWidget {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1 / 5,
+                    height: 100,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        size: 32,
+                        color: Colors.red,
+                      ),
+                      onPressed: () {},
                     ),
                   )
                 ],
