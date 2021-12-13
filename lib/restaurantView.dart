@@ -223,6 +223,20 @@ class _RestaurantViewState extends State<RestaurantView> {
                                                         });
                                                     if (response.statusCode ==
                                                         200) {
+                                                      response = await dio.get(
+                                                          "https://food-care2.herokuapp.com/rating/business/${business.id}");
+                                                      if (response.statusCode ==
+                                                          200) {
+                                                        Map<String, dynamic>
+                                                            map = response.data;
+                                                        double newRating = map
+                                                            .values
+                                                            .elementAt(1);
+                                                        setState(() {
+                                                          rating = newRating;
+                                                        });
+                                                      }
+
                                                       Navigator.of(context)
                                                           .pop();
                                                     }
@@ -270,7 +284,10 @@ class _RestaurantViewState extends State<RestaurantView> {
                         );
                       }
                     }
-                    return Container();
+                    return Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 1 / 5,
+                    );
                   },
                   future: getRole(),
                 ),
@@ -353,7 +370,6 @@ class _RestaurantViewState extends State<RestaurantView> {
                         ])),
           Container(
               width: double.infinity,
-              //padding: EdgeInsets.all(10),
               height: 350,
               decoration: BoxDecoration(
                   border: Border(top: BorderSide(color: Colors.black))),

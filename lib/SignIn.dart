@@ -20,6 +20,7 @@ class _SignIn extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Login"),
           leading: IconButton(
@@ -207,21 +208,35 @@ class _SignIn extends State<SignIn> {
                     if (response.statusCode == 200) {
                       Map<String, dynamic> map = response.data;
                       int id = map.values.elementAt(0);
-                      String e = map.values.elementAt(1);
+                      String token = map.values.elementAt(1);
                       String role = map.values.elementAt(3);
+
                       if (role.compareTo("BUSINESS") == 0) {
                         id = map.values.elementAt(4);
                       }
+                      Position? position;
                       try {
-                        Position position = await _determinePosition();
-                        dio.options.headers["Authorization"] = '${e}';
+                        position = await _determinePosition();
+                      } catch (e) {
+                        Fluttertoast.showToast(
+                            msg: "You need to enable location",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        return;
+                      }
+                      try {
+                        dio.options.headers["Authorization"] = '${token}';
                         response = await dio
                             .get("https://food-care2.herokuapp.com/user");
                         User user = User.fromJson(response.data);
-                        user.token = e;
+                        user.token = token;
                         user.latitude = position.latitude;
                         user.longitude = position.longitude;
-                        setUser(user, e, role, id);
+                        setUser(user, token, role, id);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

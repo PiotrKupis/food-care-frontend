@@ -196,6 +196,13 @@ class _SignUp extends State<SignUp> {
     );
   }
 
+  bool validateStructure(String value) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = new RegExp(pattern);
+    return regExp.hasMatch(value);
+  }
+
   Widget passwordButton(TextEditingController control) {
     return Padding(
       padding: EdgeInsets.only(left: 25, right: 25, top: 20),
@@ -204,7 +211,9 @@ class _SignUp extends State<SignUp> {
           if (password!.isEmpty || password.length < 6) {
             return "Password should have at least 6 characters";
           }
-          ;
+          if (validateStructure(password) == false) {
+            return "Password should have at least 1 big letter, 1 small letter, 1 cypher and 1 special character";
+          }
           if (passwordController.value.text
                   .compareTo(password2Controller.value.text) !=
               0) {
@@ -218,6 +227,7 @@ class _SignUp extends State<SignUp> {
         textInputAction: TextInputAction.done,
         showCursor: true,
         decoration: InputDecoration(
+          errorMaxLines: 3,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(width: 4, style: BorderStyle.none)),

@@ -692,7 +692,7 @@ class _BusinessWidgetFormComplete extends State<BusinessWidgetFormComplete> {
                       return;
                     }
                   } catch (e) {
-                    print(e);
+                    debugPrint(e.toString());
                     Fluttertoast.showToast(
                         msg: "Couldn't create account",
                         toastLength: Toast.LENGTH_SHORT,

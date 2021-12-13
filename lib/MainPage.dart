@@ -1111,18 +1111,15 @@ class LastPageContent extends StatelessWidget {
                 String? token = prefs.getString("token");
                 int? id = prefs.getInt("id");
                 dio.options.headers["Authorization"] = token;
-                print("Yyy2");
                 Response response = await dio.get(
-                    "https://food-care2.herokuapp.com/order/get_orders_by_userId/$id");
+                    "https://food-care2.herokuapp.com/product/get_products_from_orders_by_userId/$id");
                 if (response.statusCode == 200) {
-                  print("Yyy3");
                   List<dynamic> productList = response.data;
                   List<Product> list = [];
                   productList.forEach((element) {
                     Map<String, dynamic> map = element;
                     list.add(Product.fromJson(map));
                   });
-                  print("Yyy");
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -1163,7 +1160,7 @@ class LastPageContent extends StatelessWidget {
                 int? id = prefs.getInt("id");
                 dio.options.headers["Authorization"] = token;
                 Response response = await dio.get(
-                    "https://food-care2.herokuapp.com/order/get_orders_by_businessId/" +
+                    "https://food-care2.herokuapp.com/product/get_products_from_orders_by_businessId/" +
                         id.toString());
                 if (response.statusCode == 200) {
                   List<dynamic> productList = response.data;

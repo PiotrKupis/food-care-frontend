@@ -530,7 +530,6 @@ class _ChangeData extends State<ChangeData> {
                             });
                         if (response.statusCode == 200) {
                           User user = User.fromJson(response.data);
-                          //debugPrint(user.phoneNumber);
                           Fluttertoast.showToast(
                               msg: "Successfully confirmed " +
                                   dataName.toLowerCase(),

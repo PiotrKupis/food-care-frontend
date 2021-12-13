@@ -25,18 +25,54 @@ class _OfferView extends State<OfferView> {
       builder: (builder, snapshot) {
         if (snapshot.hasData) {
           List<Product> products = snapshot.data as List<Product>;
-          print(products.length);
-          return ListView.builder(
-            itemBuilder: (builder, index) {
-              return ProductResultsRow(product: products.elementAt(index));
-            },
-            itemCount: products.length,
+          if (products.length != 0) {
+            return ListView.builder(
+              itemBuilder: (builder, index) {
+                return ProductResultsRow(product: products.elementAt(index));
+              },
+              itemCount: products.length,
+            );
+          }
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: double.infinity,
+            child: Text(
+              "Empty list",
+              style: TextStyle(fontSize: 32),
+            ),
+            alignment: Alignment.center,
           );
         }
-        return Container();
+        return Container(
+          child: watingAnimation(),
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height,
+        );
       },
       future: getOffers(),
     ));
+  }
+
+  Widget watingAnimation() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Text(
+          "Please wait...",
+          style: TextStyle(
+            fontSize: 18,
+            color: Colors.purple,
+            fontWeight: FontWeight.w300,
+          ),
+        )
+      ],
+    );
   }
 
   Future<List<Product>> getOffers() async {

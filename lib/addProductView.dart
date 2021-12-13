@@ -84,7 +84,7 @@ class _AddProductView extends State<AddProductView> {
                       });
                     }
                   } catch (e) {
-                    print(e.toString());
+                    debugPrint(e.toString());
                   }
                 },
                 child: Column(
