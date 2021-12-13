@@ -455,7 +455,6 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants> {
 
             if (businesses.isEmpty) {
               return Scaffold(
-                  // resizeToAvoidBottomInset: false,
                   body: Container(
                 width: double.infinity,
                 child: Text("Empty Favorites",
@@ -466,13 +465,7 @@ class _FavoritesRestaurants extends State<FavoritesRestaurants> {
                 alignment: Alignment.center,
               ));
             }
-            return Scaffold(
-                body: ListView.builder(
-              itemBuilder: (context, index) {
-                return BusinessRow(business: businesses.elementAt(index));
-              },
-              itemCount: businesses.length,
-            ));
+            return FavoritesView(businessList: businesses);
           }
         });
   }
@@ -721,7 +714,25 @@ class _ScrollLatestFoodItems extends State<ScrollLatestFoodItems> {
             );
           } else {
             List<Product> products = snapshot.data as List<Product>;
-
+            if (products.length == 0) {
+              return Container(
+                height: 140,
+                child: Center(
+                  child: Text(
+                    "No options available",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(3.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+              );
+            }
             return Container(
                 height: 150,
                 margin: const EdgeInsets.all(10.0),
@@ -1100,16 +1111,18 @@ class LastPageContent extends StatelessWidget {
                 String? token = prefs.getString("token");
                 int? id = prefs.getInt("id");
                 dio.options.headers["Authorization"] = token;
+                print("Yyy2");
                 Response response = await dio.get(
-                    "https://food-care2.herokuapp.com/order/get_orders_by_userId/" +
-                        id.toString());
+                    "https://food-care2.herokuapp.com/order/get_orders_by_userId/$id");
                 if (response.statusCode == 200) {
+                  print("Yyy3");
                   List<dynamic> productList = response.data;
                   List<Product> list = [];
                   productList.forEach((element) {
                     Map<String, dynamic> map = element;
                     list.add(Product.fromJson(map));
                   });
+                  print("Yyy");
                   Navigator.push(
                       context,
                       MaterialPageRoute(

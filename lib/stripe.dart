@@ -33,20 +33,7 @@ class _ItemPayView extends State<ItemPayView> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        bool check = await makePayment();
-        if (check) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (builder) => MainPage()));
-        } else {
-          Fluttertoast.showToast(
-              msg: "Couldn't pay for item",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
-        }
+        await makePayment();
       },
       style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 60)),
       child: Text(
@@ -115,9 +102,9 @@ class _ItemPayView extends State<ItemPayView> {
               style: ThemeMode.dark,
               merchantCountryCode: 'PL',
               merchantDisplayName: 'Food_Care'));
-      bool check = await addOrder();
+
       await displayPaymentSheet();
-      return check;
+      return true;
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -131,10 +118,12 @@ class _ItemPayView extends State<ItemPayView> {
               parameters: PresentPaymentSheetParameters(
                   clientSecret: paymentIntentData!["client_secret"],
                   confirmPayment: true))
-          .then((value) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("paid successfully")));
-
+          .then((value) async {
+        bool check = await addOrder();
+        if (check) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (builder) => MainPage()));
+        }
         paymentIntentData = null;
       });
     } on StripeException catch (e) {
