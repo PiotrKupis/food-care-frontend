@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_care/Product.dart';
-import 'package:food_care/restaurantView.dart';
+import 'package:food_care/model/Product.dart';
+import 'package:food_care/screens/restaurantView.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:geocoder/geocoder.dart';
 
-import 'Business.dart';
+import '../model/Business.dart';
 
 class FavoritesView extends StatefulWidget {
   late List<Business> businessList;

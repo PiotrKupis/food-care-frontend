@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_care/Address.dart';
+import 'package:food_care/model/Address.dart';
 import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_care/MainPage.dart';
-import 'package:food_care/SignIn.dart';
+import 'package:food_care/screens/MainPage.dart';
+import 'package:food_care/model/SignIn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum BusinessType {

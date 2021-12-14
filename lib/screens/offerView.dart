@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:food_care/productView.dart';
+import 'package:food_care/screens/productView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Business.dart';
-import 'Product.dart';
+import '../model/Business.dart';
+import '../model/Product.dart';
 
 class OfferView extends StatefulWidget {
   final Business business;

@@ -3,10 +3,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/main.dart';
-import 'package:food_care/productView.dart';
+import 'package:food_care/screens/productView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Product.dart';
-import 'user.dart';
+import '../model/Product.dart';
+import '../model/user.dart';
 
 class UserProfile extends StatefulWidget {
   @override

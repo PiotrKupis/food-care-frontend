@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:geocoder/geocoder.dart';
-import 'Business.dart';
+import '../model/Business.dart';
 import 'restaurantView.dart';
 
 class RestaurantResult extends StatefulWidget {

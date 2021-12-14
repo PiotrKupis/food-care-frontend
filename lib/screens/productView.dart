@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_care/Product.dart';
-import 'package:food_care/stripe.dart';
+import 'package:food_care/model/Product.dart';
+import 'package:food_care/model/stripe.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Business.dart';
+import '../model/Business.dart';
 
 class ProductView extends StatefulWidget {
   late Product product;

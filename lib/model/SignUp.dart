@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_care/SignIn.dart';
+import 'package:food_care/model/SignIn.dart';
 import 'package:dio/dio.dart';
 
 class SignUp extends StatefulWidget {

@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_care/MainPage.dart';
-import 'package:food_care/user.dart';
+import 'package:food_care/model/user.dart';
+import 'package:food_care/screens/MainPage.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:email_validator/email_validator.dart';

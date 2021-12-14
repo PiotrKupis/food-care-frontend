@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_care/Product.dart';
-import 'package:food_care/restaurant_results.dart';
-import 'package:food_care/productView.dart';
+import 'package:food_care/model/Product.dart';
+import 'package:food_care/screens/restaurant_results.dart';
+import 'package:food_care/screens/productView.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
