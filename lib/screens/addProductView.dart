@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_care/screens/MainPage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -320,7 +321,7 @@ class _AddProductView extends State<AddProductView> {
                   double? price = double.tryParse(priceController.value.text);
                   double? reducedPrice =
                       double.tryParse(reducedPriceController.value.text);
-                  if (price != null && reducedPrice != null && image != null) {
+                  if (price != null && reducedPrice != null && image != null && reducedPrice > 1.99) {
                     try {
                       String date = expirationDate!.year.toString() +
                           "-" +
@@ -354,6 +355,16 @@ class _AddProductView extends State<AddProductView> {
                     } catch (e) {
                       debugPrint(e.toString());
                     }
+                  }
+                  else{
+                    Fluttertoast.showToast(
+                        msg: "Price must be greater than 1.99",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
                 }
               }),
