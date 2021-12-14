@@ -832,9 +832,9 @@ class MainPageContent extends StatelessWidget {
           children: [
             ScrollerTitle("Latest offers"),
             ScrollLatestFoodItems(),
-            ScrollerTitle("Nearest restaurants"),
+            ScrollerTitle("Nearest businesses"),
             ScrollItems(),
-            ScrollerTitle("Best restaurants"),
+            ScrollerTitle("Best businesses"),
             ScrollBestRestaurant(),
           ],
         )
@@ -1146,7 +1146,7 @@ class LastPageContent extends StatelessWidget {
             child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 22.0),
                 child: Text(
-                  "MY SALED ORDERS",
+                  "MY SOLD PRODUCTS",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 25.0,
