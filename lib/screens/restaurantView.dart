@@ -309,7 +309,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                     child: Wrap(
                       children: [
                         Text(
-                          "Country: " + business.address.country,
+                          "E-mail: " + business.email,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 18,
@@ -334,6 +334,34 @@ class _RestaurantViewState extends State<RestaurantView> {
                         Icons.restaurant,
                         color: Colors.black,
                       )),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    width: MediaQuery.of(context).size.width * 4 / 5,
+                    padding: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                    height: 50,
+                    child: Wrap(
+                      children: [
+                        Text(
+                          "Phone: " + business.phone,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    )),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 1 / 5,
                 ),
               ],
             ),
